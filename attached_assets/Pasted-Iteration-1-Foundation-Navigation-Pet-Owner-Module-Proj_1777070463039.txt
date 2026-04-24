@@ -1,0 +1,76 @@
+Iteration 1
+Foundation, Navigation & Pet Owner Module
+Project: Smart Pet Care & Veterinary Management System
+Tech Stack: HTML, CSS, JavaScript (frontend only )
+Reference Examples: https://www.chewy.com/ | https://www.petdesk.com/
+
+ITERATION 1 — Foundation, Global Layout & Pet Owner Module (POM)
+
+GOAL: Build the foundational shell of the platform and fully implement the Pet Owner Module frontend.
+
+━━━ PART A: GLOBAL FOUNDATION ━━━
+
+1. Design System Setup
+   - Define a cohesive color palette, typography system, and reusable CSS variables
+   - Create a responsive layout grid (desktop + mobile breakpoints)
+   - Build a top navigation bar with: Logo, main nav links (Pet Owner | Veterinarian | Service Provider | Marketplace | Admin), notification bell icon, user avatar dropdown
+   - Build a collapsible sidebar for module-specific navigation
+   - Create a universal footer with links and branding
+
+2. Landing / Home Page
+   - Hero section with headline, subheadline, and two CTAs: "I'm a Pet Owner" and "I'm a Professional"
+   - Features overview section (3 modules preview cards)
+   - Testimonials section (static/dummy)
+   - "How It Works" 3-step section
+
+3. Authentication Pages (UI only — no backend)
+   - Login page (email/password + social icons)
+   - Registration page with role selector: Pet Owner | Veterinarian | Service Provider
+   - "Forgot Password" page
+
+━━━ PART B: PET OWNER MODULE (POM) ━━━
+
+Pages to build:
+
+4. Owner Dashboard
+   - Welcome banner with pet avatar thumbnails
+   - Quick-action cards: Book Appointment | View Medical Records | Shop Marketplace | Track Walk
+   - Upcoming appointments widget
+   - Vaccination due dates alert banner (Function #1: Automated Vaccination Scheduler — UI)
+   - Emergency Red-Flag status indicator (Function #9 — UI only)
+
+5. My Pets Page
+   - Pet profile cards (name, species, breed, age, photo placeholder)
+   - "Add New Pet" form (modal or inline): name, species, breed, DOB, weight, photo upload
+   - Each pet card links to its dedicated pet detail page
+
+6. Pet Detail / Medical Record Page
+   - Tabs: Overview | Vaccinations | Lab Results | Prescriptions | Medical Notes | Weight History
+   - Vaccination table with status badges (Up to date / Due soon / Overdue) — Function #1 UI
+   - Lab results list with "Simplified Insight" toggle — Function #6 UI
+   - Prescription history list — Function #2 UI
+   - Weight & Nutrition trend chart (line chart using Chart.js or similar) — Function #8 UI
+   - Chronic Condition section (daily log entries display) — Function #4 UI
+   - Pet Travel Passport download button (static trigger) — Function #10 UI
+
+7. Symptom Checker / Triage Page (Function #3)
+   - Step-by-step symptom input form with species selector
+   - Logic-gate results panel: shows recommended specialist type (general vet / oncologist / behavioral)
+   - "Book Appointment" CTA after result
+
+8. Appointment Booking Page
+   - Calendar date picker UI
+   - Vet selection cards with rating, specialty, availability
+   - Appointment type selector (consultation / surgery / checkup)
+   - Confirmation summary card
+
+9. Lost Pet Alert Page (Function #34 — UI)
+   - "Report Lost Pet" form: pet photo, last seen location (map placeholder), description
+   - Broadcast status badge ("Alert sent to X users nearby")
+
+━━━ DELIVERABLE NOTES ━━━
+- All pages should be connected via navigation (no dead links)
+- Use realistic dummy data (pet names, vet names, dates)
+- All forms should have proper validation UI (error states, required field indicators)
+- Responsive on mobile and desktop
+- Prepare folder/file structure ready for PHP integration later (e.g., separate data objects in JS that can later be replaced by API calls)
