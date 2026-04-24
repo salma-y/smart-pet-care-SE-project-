@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-8" style="max-width: 80rem; width: 100%;">
+
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+              <div>
+                <h1 class="text-3xl tracking-tight mb-2">Good morning, Jane!</h1>
+                <p class="text-muted-foreground">Here's what's happening with your furry family members today.</p>
+              </div>
+              <div class="avatar-stack" id="pet-avatars"></div>
+            </div>
+
+            <!-- Emergency Status -->
+            <div class="status-card" id="status-card">
+              <div class="flex items-center gap-3">
+                <div class="status-icon" id="status-icon">
+                  <i data-lucide="activity" class="i-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold" id="status-title">Health Status: All Clear</h3>
+                  <p class="text-sm text-muted-foreground" id="status-desc">No urgent issues reported across your pets.</p>
+                </div>
+              </div>
+              <button class="btn btn-ghost btn-sm" id="toggle-emergency">Toggle Demo</button>
+            </div>
+
+            <!-- Vaccination Alerts -->
+            <div id="vac-alerts"></div>
+
+            <!-- Quick Actions -->
+            <div class="grid grid-4">
+              <a href="appointments-new.html" class="quick-action">
+                <div class="quick-action-icon" style="background:#dbeafe;">
+                  <i data-lucide="calendar-days" class="i-6 text-blue-500"></i>
+                </div>
+                <span>Book Appointment</span>
+              </a>
+              <a href="pets.html" class="quick-action">
+                <div class="quick-action-icon" style="background:#dcfce7;">
+                  <i data-lucide="file-text" class="i-6 text-green-500"></i>
+                </div>
+                <span>Medical Records</span>
+              </a>
+              <a href="coming-soon.html" class="quick-action">
+                <div class="quick-action-icon" style="background:#f3e8ff;">
+                  <i data-lucide="shopping-bag" class="i-6 text-purple-500"></i>
+                </div>
+                <span>Shop Marketplace</span>
+              </a>
+              <a href="coming-soon.html" class="quick-action">
+                <div class="quick-action-icon" style="background:#ffedd5;">
+                  <i data-lucide="map-pin" class="i-6 text-orange-500"></i>
+                </div>
+                <span>Track Walk</span>
+              </a>
+            </div>
+
+            <div class="grid grid-2" style="gap:2rem;">
+              <!-- Upcoming Appointments -->
+              <div class="card card-soft">
+                <div class="card-header flex items-center justify-between">
+                  <h3 class="text-xl font-bold">Upcoming Appointments</h3>
+                  <a href="appointments.html" class="btn btn-ghost btn-sm text-muted-foreground">View all</a>
+                </div>
+                <div class="card-content space-y-4" id="upcoming-list"></div>
+              </div>
+
+              <!-- Pet Summaries -->
+              <div class="card card-soft">
+                <div class="card-header pb-2">
+                  <h3 class="text-xl font-bold">Your Pets</h3>
+                </div>
+                <div class="card-content space-y-4" id="pets-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "dashboard" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/dashboard.js"></script>
+  </body>
+</html>

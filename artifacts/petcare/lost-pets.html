@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lost Pet Alerts — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-8" style="max-width: 80rem; width: 100%;">
+            <!-- Header -->
+            <div class="flex flex-col" style="background: hsl(0 70% 60% / 0.05); padding: 2rem; border-radius: var(--radius-3xl); border: 1px solid hsl(0 70% 60% / 0.2); position: relative; overflow: hidden;">
+              <div style="position: absolute; right: -2.5rem; top: -2.5rem; opacity: 0.05; pointer-events: none;">
+                <i data-lucide="triangle-alert" style="width: 16rem; height: 16rem; color: var(--destructive);"></i>
+              </div>
+              <div class="flex flex-col lg:flex-row justify-between items-start gap-6" style="position: relative; z-index: 1;">
+                <div style="max-width: 42rem;">
+                  <span class="badge" style="background: hsl(0 70% 60% / 0.1); color: var(--destructive); border-color: hsl(0 70% 60% / 0.2); font-size: 0.875rem; padding: 0.25rem 0.75rem; margin-bottom: 1rem;">Community Alert Network</span>
+                  <h1 class="text-3xl md:text-4xl tracking-tight mb-3">Lost Pet Alerts</h1>
+                  <p class="text-muted-foreground text-lg">Mobilize the PetWell community. When a pet goes missing, every minute counts. Report a lost pet to instantly alert users in your area.</p>
+                </div>
+                <button class="btn btn-destructive btn-lg btn-h14 px-8" style="box-shadow: 0 10px 30px -10px hsl(0 70% 60% / 0.4);" onclick="openModal('report-modal')">
+                  <i data-lucide="triangle-alert" class="i-5"></i> Report Lost Pet
+                </button>
+              </div>
+            </div>
+
+            <!-- Active Alerts -->
+            <div>
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold flex items-center gap-2">
+                  <i data-lucide="search" class="i-5 text-primary"></i> Active Local Alerts
+                </h2>
+                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                  <i data-lucide="map-pin" class="i-4"></i> 5 mile radius
+                </div>
+              </div>
+              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="alerts-grid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal-backdrop" id="report-modal">
+      <div class="modal modal-lg" id="report-modal-content"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "lost-pets" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/lost-pets.js"></script>
+  </body>
+</html>

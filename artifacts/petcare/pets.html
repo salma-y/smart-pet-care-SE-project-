@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Pets — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-8" style="max-width: 80rem; width: 100%;">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h1 class="text-3xl tracking-tight">My Pets</h1>
+                <p class="text-muted-foreground">Manage your furry family members.</p>
+              </div>
+              <button class="btn btn-primary" onclick="openModal('add-pet-modal')">
+                <i data-lucide="plus" class="i-4"></i> Add New Pet
+              </button>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="pets-grid"></div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <!-- Add Pet Modal -->
+    <div class="modal-backdrop" id="add-pet-modal">
+      <div class="modal">
+        <form id="add-pet-form">
+          <div class="modal-header">
+            <h3 class="text-lg font-bold">Add New Pet</h3>
+            <p class="card-description">Enter your pet's details to create their medical profile.</p>
+          </div>
+          <div class="modal-body space-y-4">
+            <div>
+              <label class="label" for="pet-name">Name</label>
+              <input class="input" id="pet-name" name="name" required />
+            </div>
+            <div>
+              <label class="label" for="pet-species">Species</label>
+              <select class="select" id="pet-species" name="species">
+                <option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Reptile</option><option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="label" for="pet-breed">Breed</label>
+              <input class="input" id="pet-breed" name="breed" required />
+            </div>
+            <div>
+              <label class="label" for="pet-age">Age</label>
+              <input class="input" id="pet-age" name="age" placeholder="e.g. 2 years, 3 months" required />
+            </div>
+            <div>
+              <label class="label" for="pet-weight">Weight (kg)</label>
+              <input class="input" id="pet-weight" name="weight" type="number" step="0.1" required />
+            </div>
+            <div>
+              <label class="label" for="pet-photo">Photo</label>
+              <input class="input" id="pet-photo" name="photo" type="file" accept="image/*" />
+            </div>
+            <div>
+              <label class="label" for="pet-notes">Notes</label>
+              <input class="input" id="pet-notes" name="notes" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" data-modal-close>Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Pet</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "pets" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/pets.js"></script>
+  </body>
+</html>

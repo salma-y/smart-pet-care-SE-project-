@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointments — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 64rem; width: 100%;">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+              <div>
+                <h1 class="text-3xl tracking-tight">Appointments</h1>
+                <p class="text-muted-foreground">Manage your vet visits and schedules.</p>
+              </div>
+              <a href="appointments-new.html" class="btn btn-primary"><i data-lucide="plus" class="i-4"></i> Book Appointment</a>
+            </div>
+
+            <div>
+              <div class="tabs-list" style="grid-template-columns: repeat(2, 1fr); max-width: 400px;">
+                <button class="tab active" data-tab="upcoming" id="tab-upcoming">Upcoming (0)</button>
+                <button class="tab" data-tab="past">Past History</button>
+              </div>
+
+              <div class="tab-content active space-y-4" data-tab-content="upcoming" id="upcoming-content"></div>
+              <div class="tab-content space-y-4" data-tab-content="past" id="past-content"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "appointments" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/appointments.js"></script>
+  </body>
+</html>

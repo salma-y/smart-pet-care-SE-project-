@@ -5,12 +5,180 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>PetWell — Smart Pet Care & Veterinary Management</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="page-content">
+        <!-- Hero -->
+        <section class="hero-bg" style="position: relative; overflow: hidden; padding: 5rem 0;">
+          <div class="hidden md:block" style="position:absolute; top:0; right:0; transform: translate(33%, -3rem); opacity:0.07; pointer-events:none;">
+            <i data-lucide="heart" style="width:24rem; height:24rem; color: var(--primary);"></i>
+          </div>
+          <div class="container relative">
+            <div class="max-w-3xl">
+              <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+                The warm, trustworthy hub for your pet's entire life.
+              </h1>
+              <p class="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
+                Manage vaccinations, vet visits, medical records, and daily care in one beautiful, simple place. Because they're not just pets, they're family.
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4">
+                <a href="register.html?role=owner" class="btn btn-primary btn-lg btn-rounded btn-h14 px-8">I'm a Pet Owner</a>
+                <a href="register.html?role=pro" class="btn btn-outline btn-lg btn-rounded btn-h14 px-8">I'm a Professional</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Modules -->
+        <section style="padding: 5rem 0;">
+          <div class="container">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+              <h2 class="text-3xl mb-4">Everything you need, connected.</h2>
+              <p class="text-muted-foreground text-lg">PetWell brings together owners, veterinarians, and service providers into one seamless ecosystem.</p>
+            </div>
+            <div class="grid grid-3">
+              <!-- Owners -->
+              <div class="card p-8" style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="quick-action-icon bg-primary-tint" style="width:3.5rem; height:3.5rem; border-radius:0.75rem;">
+                  <i data-lucide="heart" class="i-7 text-primary"></i>
+                </div>
+                <h3 class="text-xl">For Pet Owners</h3>
+                <p class="text-muted-foreground">Keep medical records, track vaccinations, book appointments, and monitor your pet's health all in one place.</p>
+                <ul class="space-y-2 text-sm">
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-primary"></i> Digital medical records</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-primary"></i> Vaccination reminders</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-primary"></i> Symptom checker</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-primary"></i> Lost pet alerts</li>
+                </ul>
+                <a href="dashboard.html" class="btn btn-outline w-full">Explore Owner Dashboard</a>
+              </div>
+              <!-- Vets -->
+              <div class="card p-8" style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="quick-action-icon" style="background:#dbeafe; width:3.5rem; height:3.5rem; border-radius:0.75rem;">
+                  <i data-lucide="shield" class="i-7 text-blue-500"></i>
+                </div>
+                <h3 class="text-xl">For Veterinarians</h3>
+                <p class="text-muted-foreground">Streamline your clinic with modern scheduling, digital records sharing, and direct client communication.</p>
+                <ul class="space-y-2 text-sm">
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-blue-500"></i> Smart scheduling</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-blue-500"></i> Digital patient records</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-blue-500"></i> Lab result sharing</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-blue-500"></i> Client messaging</li>
+                </ul>
+                <a href="coming-soon.html" class="btn btn-outline w-full">Explore Vet Dashboard</a>
+              </div>
+              <!-- Service Providers -->
+              <div class="card p-8" style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="quick-action-icon" style="background:#ffedd5; width:3.5rem; height:3.5rem; border-radius:0.75rem;">
+                  <i data-lucide="store" class="i-7 text-orange-500"></i>
+                </div>
+                <h3 class="text-xl">For Service Providers</h3>
+                <p class="text-muted-foreground">Groomers, walkers, and sitters can manage bookings, verify vaccinations, and accept payments easily.</p>
+                <ul class="space-y-2 text-sm">
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-orange-500"></i> Booking management</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-orange-500"></i> Vaccine verification</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-orange-500"></i> Client notes</li>
+                  <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="i-4 text-orange-500"></i> Integrated payments</li>
+                </ul>
+                <a href="coming-soon.html" class="btn btn-outline w-full">Explore Provider Dashboard</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- How it works -->
+        <section style="padding: 5rem 0; background: hsl(40 40% 92% / 0.3);">
+          <div class="container">
+            <h2 class="text-3xl text-center mb-16">How PetWell Works</h2>
+            <div class="grid grid-3 max-w-5xl mx-auto" style="gap: 3rem;">
+              <div class="text-center">
+                <div class="mx-auto mb-6" style="width:4rem;height:4rem;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:700;color:var(--primary);box-shadow:var(--shadow-sm);border:1px solid hsl(160 47% 45% / 0.2);">1</div>
+                <h4 class="text-xl mb-2">Create a Profile</h4>
+                <p class="text-muted-foreground">Add your pets, their photos, and basic info to get started.</p>
+              </div>
+              <div class="text-center">
+                <div class="mx-auto mb-6" style="width:4rem;height:4rem;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:700;color:var(--primary);box-shadow:var(--shadow-sm);border:1px solid hsl(160 47% 45% / 0.2);">2</div>
+                <h4 class="text-xl mb-2">Connect Your Vet</h4>
+                <p class="text-muted-foreground">Link your preferred clinic to automatically import medical records.</p>
+              </div>
+              <div class="text-center">
+                <div class="mx-auto mb-6" style="width:4rem;height:4rem;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:700;color:var(--primary);box-shadow:var(--shadow-sm);border:1px solid hsl(160 47% 45% / 0.2);">3</div>
+                <h4 class="text-xl mb-2">Manage with Ease</h4>
+                <p class="text-muted-foreground">Book appointments, get vaccine reminders, and track health trends.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section style="padding: 5rem 0;">
+          <div class="container">
+            <h2 class="text-3xl text-center mb-16">Loved by pet parents</h2>
+            <div class="grid grid-3 lg:grid-cols-4">
+              <div class="card p-6">
+                <div class="flex gap-1 mb-4 text-amber-500">
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                </div>
+                <p class="text-muted-foreground mb-6">"PetWell completely changed how I manage Max's care. The vaccine reminders alone are a lifesaver."</p>
+                <p class="font-semibold text-sm">Sarah M.</p>
+                <p class="text-xs text-muted-foreground">Owner of Max (Golden Retriever)</p>
+              </div>
+              <div class="card p-6">
+                <div class="flex gap-1 mb-4 text-amber-500">
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                </div>
+                <p class="text-muted-foreground mb-6">"Having all of Luna's lab results explained in plain English is incredible. I finally understand what the numbers mean."</p>
+                <p class="font-semibold text-sm">David T.</p>
+                <p class="text-xs text-muted-foreground">Owner of Luna (Siamese)</p>
+              </div>
+              <div class="card p-6">
+                <div class="flex gap-1 mb-4 text-amber-500">
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                </div>
+                <p class="text-muted-foreground mb-6">"Booking vet appointments used to take three phone calls. Now it takes three taps on my phone."</p>
+                <p class="font-semibold text-sm">Emily R.</p>
+                <p class="text-xs text-muted-foreground">Owner of Bella & Cooper</p>
+              </div>
+              <div class="card p-6">
+                <div class="flex gap-1 mb-4 text-amber-500">
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                  <i data-lucide="star" class="i-4" fill="currentColor"></i>
+                </div>
+                <p class="text-muted-foreground mb-6">"The weight tracking helped us notice a trend early, and we adjusted Zeus's diet before it became an issue."</p>
+                <p class="font-semibold text-sm">Mark J.</p>
+                <p class="text-xs text-muted-foreground">Owner of Zeus (German Shepherd)</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "home" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/shell.js"></script>
   </body>
 </html>
