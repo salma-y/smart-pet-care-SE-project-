@@ -1,0 +1,96 @@
+Iteration 2
+Veterinarian Module + Marketplace
+Project: Smart Pet Care & Veterinary Management System
+Tech Stack: HTML, CSS, JavaScript (frontend only )
+Reference Examples: https://www.chewy.com/ | https://www.petdesk.com/
+Continue from Iteration 1 — maintain the same design system, color palette, and navigation shell.
+
+ITERATION 2 — Veterinarian Module (VM) & Marketplace Module
+
+━━━ PART A: VETERINARIAN MODULE (VM) ━━━
+
+Pages to build:
+
+1. Vet Dashboard
+   - Today's appointment schedule (timeline view)
+   - Patient alerts panel (flagged conditions, overdue follow-ups)
+   - Quick actions: New Prescription | Add Lab Result | Issue Referral | Write Note
+   - Surgery room availability widget — Function #5 UI
+
+2. Patient Search & List Page
+   - Search bar with filters: species, condition, owner name
+   - Patient cards with: pet photo, name, species, last visit date, active condition badges
+   - Click opens the full Patient Record (shared read view with Pet Detail page from Iteration 1)
+
+3. Consultation / Session Page
+   - Active session panel: pet info sidebar + main writing area
+   - Collaborative medical notes editor (multi-vet audit trail UI) — Function #11 UI
+   - Add finding / diagnosis entry form
+   - Attach lab result button — Function #6 UI
+
+4. Prescription Issuer (Function #2)
+   - Drug name autocomplete input
+   - Drug-interaction warning alert component (simulated red warning banner)
+   - Dosage, frequency, duration inputs
+   - Prescription preview card + "Issue Prescription" CTA
+   - Links prescription to Marketplace for therapeutic diet purchases — Function #13 UI
+
+5. Lab Results Upload Page (Function #6)
+   - File upload dropzone (UI only)
+   - "Simplified Insight" text input (for owner-facing summary)
+   - Technical notes section (vet-only)
+   - Result status: Pending Review | Reviewed | Shared with Owner
+
+6. Referral Workflow Page (Function #7)
+   - Referral form: recipient clinic, specialist type, reason for referral
+   - Attached records selector (which parts of medical history to share)
+   - Referral status tracker: Sent | Received | In Progress | Completed
+
+7. Surgery Scheduler (Function #5)
+   - Operating room calendar grid (rooms as columns, time slots as rows)
+   - Double-booking conflict alert UI
+   - Assign surgeon, equipment, anesthesiologist dropdowns
+
+8. Vet Income & Schedule Page
+   - Monthly appointment stats (bar chart)
+   - Revenue overview cards
+   - Upcoming schedule list
+
+━━━ PART B: MARKETPLACE MODULE ━━━
+
+Pages to build:
+
+9. Marketplace Home / Browse Page
+   - Category filters: Food | Supplements | Prescription Diet | Accessories
+   - Product grid cards: photo, name, price, rating, "Vet Recommended" badge
+   - Allergy alert banner at top if pet has known allergens in results — Function #15 UI
+   - "Prescription Required" lock icon on restricted items — Function #13 UI
+
+10. Product Detail Page
+    - Product images carousel placeholder
+    - Ingredient list with allergen highlights — Function #15 UI
+    - Medical-Diet Compatibility badge (compatible / incompatible / restricted) — Function #12 UI
+    - "Add to Cart" / "Request Prescription" CTA
+    - Recall warning banner (if applicable) — Function #20 UI
+    - Vet Recommended discount badge — Function #16 UI
+
+11. Cart & Checkout Page
+    - Multi-vendor cart items list — Function #18 UI (vendor label per item)
+    - Auto-ship subscription toggle per item — Function #14 UI
+    - Order consolidation info ("Combined into 1 delivery") — Function #21 UI
+    - Tax & currency display — Function #41 UI
+    - Checkout summary card
+
+12. Subscription Management Page (Function #14)
+    - Active subscriptions list: product, frequency, next delivery date
+    - Edit / Pause / Cancel per subscription
+    - Delivery date adjustment slider
+
+13. Loyalty Health Points Page (Function #19)
+    - Points balance card
+    - Recent points earned (table: action, date, points)
+    - How to earn points guide
+    - Redeem points section
+
+14. Product Recall Notifications Page (Function #20)
+    - List of recalls matching owner's purchase history

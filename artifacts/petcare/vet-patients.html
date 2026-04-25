@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patients — PetWell Vet</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Patients</h1>
+                <p>Search and review your active patient roster.</p>
+              </div>
+              <span class="badge badge-primary" id="result-count">0 patients</span>
+            </div>
+
+            <div class="filters-bar">
+              <div class="search-input">
+                <i data-lucide="search"></i>
+                <input class="input" id="q" placeholder="Search by pet or owner name..." />
+              </div>
+              <select class="select" id="filter-species" style="max-width:10rem;">
+                <option value="">All species</option>
+                <option>Dog</option>
+                <option>Cat</option>
+                <option>Bird</option>
+              </select>
+              <select class="select" id="filter-condition" style="max-width:14rem;">
+                <option value="">All conditions</option>
+                <option>Allergies</option>
+                <option>Diabetes</option>
+                <option>Renal</option>
+                <option>Hyperthyroidism</option>
+                <option>Hip Dysplasia</option>
+              </select>
+              <button class="btn btn-outline btn-sm" id="reset-filters"><i data-lucide="x" class="i-4"></i> Reset</button>
+            </div>
+
+            <div class="patient-grid" id="patient-grid"></div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "vet-patients" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/vet-patients.js"></script>
+  </body>
+</html>

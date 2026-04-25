@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketplace — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Marketplace</h1>
+                <p>Vet-recommended food, supplements, and care essentials.</p>
+              </div>
+              <div class="flex gap-2 items-center">
+                <select class="select" id="sort" style="max-width:12rem;">
+                  <option value="rec">Recommended</option>
+                  <option value="price-asc">Price: Low to High</option>
+                  <option value="price-desc">Price: High to Low</option>
+                  <option value="rating">Top Rated</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Allergen alert (function #15) -->
+            <div id="allergen-slot"></div>
+
+            <!-- Categories -->
+            <div class="chip-group" id="cats">
+              <span class="chip active" data-cat="All">All</span>
+              <span class="chip" data-cat="Food">Food</span>
+              <span class="chip" data-cat="Supplements">Supplements</span>
+              <span class="chip" data-cat="Prescription Diet">Prescription Diet</span>
+              <span class="chip" data-cat="Accessories">Accessories</span>
+            </div>
+
+            <div class="filters-bar">
+              <div class="search-input">
+                <i data-lucide="search"></i>
+                <input class="input" id="q" placeholder="Search products..." />
+              </div>
+              <label class="checkbox-row" style="cursor:pointer;background:transparent;border:1px solid var(--border);">
+                <input type="checkbox" id="vet-only" />
+                <span class="text-sm">Vet recommended only</span>
+              </label>
+              <span class="text-sm text-muted-foreground" id="result-count" style="margin-left:auto;"></span>
+            </div>
+
+            <div class="product-grid" id="product-grid"></div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "marketplace" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/marketplace.js"></script>
+  </body>
+</html>

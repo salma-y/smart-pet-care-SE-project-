@@ -1,11 +1,16 @@
 import { defineConfig } from "vite";
 import path from "path";
 
+// Validate PORT
 const rawPort = process.env.PORT;
 if (!rawPort) throw new Error("PORT environment variable is required.");
-const port = Number(rawPort);
-if (Number.isNaN(port) || port <= 0) throw new Error(`Invalid PORT: "${rawPort}"`);
 
+const port = Number(rawPort);
+if (Number.isNaN(port) || port <= 0) {
+  throw new Error(`Invalid PORT: "${rawPort}"`);
+}
+
+// Validate BASE_PATH
 const basePath = process.env.BASE_PATH;
 if (!basePath) throw new Error("BASE_PATH environment variable is required.");
 
@@ -31,6 +36,22 @@ export default defineConfig({
         appointmentsNew: path.resolve(root, "appointments-new.html"),
         lostPets: path.resolve(root, "lost-pets.html"),
         comingSoon: path.resolve(root, "coming-soon.html"),
+        // Vet module
+        vetDashboard: path.resolve(root, "vet-dashboard.html"),
+        vetPatients: path.resolve(root, "vet-patients.html"),
+        vetConsultation: path.resolve(root, "vet-consultation.html"),
+        vetPrescription: path.resolve(root, "vet-prescription.html"),
+        vetLabUpload: path.resolve(root, "vet-lab-upload.html"),
+        vetReferral: path.resolve(root, "vet-referral.html"),
+        vetSurgery: path.resolve(root, "vet-surgery.html"),
+        vetIncome: path.resolve(root, "vet-income.html"),
+        // Marketplace
+        marketplace: path.resolve(root, "marketplace.html"),
+        marketplaceProduct: path.resolve(root, "marketplace-product.html"),
+        cart: path.resolve(root, "cart.html"),
+        subscriptions: path.resolve(root, "subscriptions.html"),
+        loyalty: path.resolve(root, "loyalty.html"),
+        recalls: path.resolve(root, "recalls.html"),
       },
     },
   },

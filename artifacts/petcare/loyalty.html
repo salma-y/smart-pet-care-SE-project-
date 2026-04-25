@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loyalty Points — PetWell Marketplace</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 72rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Loyalty Health Points</h1>
+                <p>Function #19 — Earn points for every wellness activity and order.</p>
+              </div>
+            </div>
+
+            <!-- Hero -->
+            <div class="loyalty-hero" id="loyalty-hero"></div>
+
+            <div class="grid grid-2" style="gap:1.5rem;">
+              <!-- History -->
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Recent Points Earned</h3></div>
+                <div class="card-content">
+                  <table class="table-clean">
+                    <thead><tr><th>Action</th><th>Date</th><th class="text-right">Points</th></tr></thead>
+                    <tbody id="hist-body"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- How to earn -->
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">How to Earn Points</h3></div>
+                <div class="card-content space-y-3">
+                  <div class="flex items-start gap-3">
+                    <div class="quick-action-icon bg-primary-tint" style="width:2.5rem;height:2.5rem;flex-shrink:0;"><i data-lucide="shopping-bag" class="i-5 text-primary"></i></div>
+                    <div><strong style="font-size:0.9375rem;">Place an order</strong><p class="text-sm text-muted-foreground">Earn 10 points per $1 spent.</p></div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <div class="quick-action-icon" style="background:#dbeafe;width:2.5rem;height:2.5rem;flex-shrink:0;"><i data-lucide="syringe" class="i-5 text-blue-500"></i></div>
+                    <div><strong style="font-size:0.9375rem;">Log a vaccination</strong><p class="text-sm text-muted-foreground">100 points per vaccine recorded.</p></div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <div class="quick-action-icon" style="background:#dcfce7;width:2.5rem;height:2.5rem;flex-shrink:0;"><i data-lucide="repeat" class="i-5 text-green-500"></i></div>
+                    <div><strong style="font-size:0.9375rem;">Set up auto-ship</strong><p class="text-sm text-muted-foreground">75 bonus points per delivery.</p></div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <div class="quick-action-icon" style="background:#f3e8ff;width:2.5rem;height:2.5rem;flex-shrink:0;"><i data-lucide="users" class="i-5 text-purple-500"></i></div>
+                    <div><strong style="font-size:0.9375rem;">Refer a friend</strong><p class="text-sm text-muted-foreground">500 points when they place their first order.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Redeem -->
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Redeem Points</h3></div>
+              <div class="card-content">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3" id="redeem-grid"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "loyalty" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/loyalty.js"></script>
+  </body>
+</html>

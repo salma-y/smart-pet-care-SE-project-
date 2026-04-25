@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Income & Schedule — PetWell Vet</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Income & Schedule</h1>
+                <p>Your monthly performance and upcoming workload.</p>
+              </div>
+              <select class="select" id="period" style="max-width:12rem;">
+                <option>This year</option>
+                <option>Last 6 months</option>
+                <option>Last 30 days</option>
+              </select>
+            </div>
+
+            <!-- Revenue overview -->
+            <div class="grid grid-4">
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#dcfce7;color:#15803d;"><i data-lucide="dollar-sign" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 12.4%</span>
+                </div>
+                <div class="stat-value">$184,290</div>
+                <div class="stat-label">YTD revenue</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#dbeafe;color:#2563eb;"><i data-lucide="receipt" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 8.0%</span>
+                </div>
+                <div class="stat-value">$92.10</div>
+                <div class="stat-label">Avg. ticket</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#fef9c3;color:#a16207;"><i data-lucide="users" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 24</span>
+                </div>
+                <div class="stat-value">487</div>
+                <div class="stat-label">Active patients</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#f3e8ff;color:#a855f7;"><i data-lucide="clock" class="i-5"></i></div>
+                  <span class="stat-delta down"><i data-lucide="arrow-down" class="i-3"></i> 3 min</span>
+                </div>
+                <div class="stat-value">28 min</div>
+                <div class="stat-label">Avg. visit length</div>
+              </div>
+            </div>
+
+            <!-- Bar chart -->
+            <div class="card card-soft">
+              <div class="card-header flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold">Monthly Appointments</h3>
+                  <p class="card-description">Trailing 12 months</p>
+                </div>
+                <span class="badge badge-primary">2,145 total</span>
+              </div>
+              <div class="card-content">
+                <div class="bar-chart" id="bar-chart"></div>
+              </div>
+            </div>
+
+            <!-- Upcoming -->
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Upcoming Schedule (next 7 days)</h3></div>
+              <div class="card-content">
+                <table class="table-clean">
+                  <thead><tr><th>Day</th><th>Time</th><th>Patient</th><th>Type</th><th>Room</th><th></th></tr></thead>
+                  <tbody id="upcoming-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "vet-income" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/vet-income.js"></script>
+  </body>
+</html>

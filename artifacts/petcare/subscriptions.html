@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscriptions — PetWell Marketplace</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 72rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Auto-ship Subscriptions</h1>
+                <p>Function #14 — Manage recurring deliveries and save 10% on every order.</p>
+              </div>
+              <a href="marketplace.html" class="btn btn-outline btn-sm"><i data-lucide="plus" class="i-4"></i> Add subscription</a>
+            </div>
+
+            <div id="subs-list" class="space-y-4"></div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "subscriptions" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/subscriptions.js"></script>
+  </body>
+</html>

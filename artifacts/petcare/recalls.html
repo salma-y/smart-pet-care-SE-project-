@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Recalls — PetWell Marketplace</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 64rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Product Recall Notifications</h1>
+                <p>Function #20 — Recalls matching your purchase history are flagged in red.</p>
+              </div>
+              <span class="badge badge-red" id="affected-count">0 affect you</span>
+            </div>
+
+            <div class="tabs-list" style="grid-template-columns: 1fr 1fr;">
+              <div class="tab active" data-tab="affected">Affecting Your Pets</div>
+              <div class="tab" data-tab="all">All Recent Recalls</div>
+            </div>
+            <div class="tab-content active" id="tab-affected"></div>
+            <div class="tab-content" id="tab-all"></div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "recalls" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/recalls.js"></script>
+  </body>
+</html>

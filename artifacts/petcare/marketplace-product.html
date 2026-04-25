@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product — PetWell Marketplace</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 72rem; width: 100%;">
+
+            <a href="marketplace.html" class="btn btn-ghost btn-sm" style="align-self:flex-start;"><i data-lucide="arrow-left" class="i-4"></i> Back to marketplace</a>
+
+            <div id="recall-slot"></div>
+
+            <div class="pdp-grid" id="pdp"></div>
+
+            <!-- Description / details tabs -->
+            <div class="card card-soft">
+              <div class="card-content">
+                <div class="tabs-list" style="grid-template-columns: 1fr 1fr 1fr;">
+                  <div class="tab active" data-tab="desc">Description</div>
+                  <div class="tab" data-tab="ingredients">Ingredients</div>
+                  <div class="tab" data-tab="reviews">Reviews</div>
+                </div>
+                <div class="tab-content active" id="tab-desc"></div>
+                <div class="tab-content" id="tab-ingredients"></div>
+                <div class="tab-content" id="tab-reviews"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "marketplace-product" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/marketplace-product.js"></script>
+  </body>
+</html>

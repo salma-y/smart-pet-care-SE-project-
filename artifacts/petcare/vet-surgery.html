@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surgery Scheduler — PetWell Vet</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Surgery Scheduler</h1>
+                <p>Function #5 — Manage operating rooms and avoid double-bookings.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openModal('book-modal')"><i data-lucide="plus" class="i-4"></i> Book Slot</button>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header flex items-center justify-between">
+                <h3 class="text-lg font-semibold">Today — Operating Room Calendar</h3>
+                <div class="flex gap-2">
+                  <button class="btn btn-outline btn-sm"><i data-lucide="chevron-left" class="i-4"></i></button>
+                  <button class="btn btn-outline btn-sm">Today</button>
+                  <button class="btn btn-outline btn-sm"><i data-lucide="chevron-right" class="i-4"></i></button>
+                </div>
+              </div>
+              <div class="card-content">
+                <div id="surgery-grid-wrap"></div>
+                <div id="conflict-banner"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Modal -->
+      <div class="modal-backdrop" id="book-modal">
+        <div class="modal modal-lg">
+          <div class="modal-header flex items-center justify-between">
+            <h3 class="text-lg font-semibold">Book Surgery Slot</h3>
+            <button data-modal-close class="icon-btn"><i data-lucide="x" class="i-5"></i></button>
+          </div>
+          <div class="modal-body space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="label">Patient name</label>
+                <input class="input" id="bk-patient" placeholder="e.g. Bear" />
+              </div>
+              <div>
+                <label class="label">Procedure</label>
+                <input class="input" id="bk-proc" placeholder="e.g. Spay" />
+              </div>
+              <div>
+                <label class="label">Operating room</label>
+                <select class="select" id="bk-room"></select>
+              </div>
+              <div>
+                <label class="label">Surgeon</label>
+                <select class="select" id="bk-surgeon">
+                  <option>Dr. Sarah Jenkins</option>
+                  <option>Dr. Michael Chen</option>
+                  <option>Dr. Emily Rodriguez</option>
+                </select>
+              </div>
+              <div>
+                <label class="label">Anesthesiologist</label>
+                <select class="select">
+                  <option>Dr. Lisa Park</option>
+                  <option>Dr. Tom Bryant</option>
+                  <option>None required</option>
+                </select>
+              </div>
+              <div>
+                <label class="label">Equipment</label>
+                <select class="select">
+                  <option>Standard</option>
+                  <option>X-Ray</option>
+                  <option>Ultrasound</option>
+                  <option>Endoscopy</option>
+                </select>
+              </div>
+              <div>
+                <label class="label">Start time</label>
+                <input class="input" id="bk-start" type="time" value="10:00" />
+              </div>
+              <div>
+                <label class="label">End time</label>
+                <input class="input" id="bk-end" type="time" value="11:30" />
+              </div>
+            </div>
+            <div id="bk-warning"></div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline" data-modal-close>Cancel</button>
+            <button class="btn btn-primary" id="bk-save">Book Slot</button>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "vet-surgery" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/vet-surgery.js"></script>
+  </body>
+</html>
