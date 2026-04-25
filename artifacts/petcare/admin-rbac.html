@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RBAC Permissions — PetWell Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Role-Based Access Control</h1>
+                <p>Cross-cutting #43 — explicit permission matrix governing every feature.</p>
+              </div>
+              <div class="flex gap-2">
+                <span class="rbac-cell edit">Edit</span>
+                <span class="rbac-cell view">View only</span>
+                <span class="rbac-cell none">No access</span>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-content" style="padding:0;">
+                <table class="rbac-table" id="rbac-table"></table>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Change History</h3></div>
+              <div class="card-content">
+                <div class="audit-trail">
+                  <div class="audit-item"><strong style="font-size:0.875rem;">Permissions matrix exported as PDF</strong><p class="text-xs text-muted-foreground">Admin Jordan · 2026-04-22 14:08</p></div>
+                  <div class="audit-item"><strong style="font-size:0.875rem;">Service Provider granted view access to Health Alerts</strong><p class="text-xs text-muted-foreground">Admin Jordan · 2026-04-15 09:22</p></div>
+                  <div class="audit-item"><strong style="font-size:0.875rem;">Pet Owner edit access removed from medical record edits</strong><p class="text-xs text-muted-foreground">Admin Pat · 2026-03-30 16:40</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-rbac" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const cycle = { edit: "view", view: "none", none: "edit" };
+        const labelOf = { edit: '<i data-lucide="check" class="i-3"></i> Edit', view: '<i data-lucide="eye" class="i-3"></i> View', none: '<i data-lucide="minus" class="i-3"></i> None' };
+
+        const render = () => {
+          const roles = window.AdminData.getRbacRoles();
+          const features = window.AdminData.getRbacFeatures();
+          const groups = [...new Set(features.map(f => f.group))];
+          let html = `<thead><tr><th>Feature</th>${roles.map(r => `<th>${r}</th>`).join("")}</tr></thead><tbody>`;
+          groups.forEach(g => {
+            html += `<tr class="rbac-group-header"><td colspan="${roles.length + 1}">${g}</td></tr>`;
+            features.filter(f => f.group === g).forEach(f => {
+              html += `<tr><td>${f.name}</td>${roles.map(r => `<td><span class="rbac-cell ${f.perms[r]}" data-feat="${f.id}" data-role="${r}">${labelOf[f.perms[r]]}</span></td>`).join("")}</tr>`;
+            });
+          });
+          html += "</tbody>";
+          document.getElementById("rbac-table").innerHTML = html;
+          if (window.renderIcons) window.renderIcons();
+        };
+        render();
+
+        document.getElementById("rbac-table").addEventListener("click", (e) => {
+          const c = e.target.closest("[data-feat]");
+          if (c) {
+            const f = c.dataset.feat, r = c.dataset.role;
+            const cur = window.AdminData.getRbacFeatures().find(x => x.id === f).perms[r];
+            window.AdminData.setRbacPerm(f, r, cycle[cur]);
+            window.showToast("Permission updated", `${r}: ${cycle[cur]}`);
+            render();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispute Mediation — PetWell Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Dispute Mediation</h1>
+                <p>Function #34 — neutral chat with both parties, evidence review, and resolution actions.</p>
+              </div>
+              <span class="badge badge-red">3 open</span>
+            </div>
+
+            <div class="kyc-layout">
+              <div class="space-y-2" id="dispute-list"></div>
+              <div class="card card-soft">
+                <div class="card-header" id="d-header"><h3 class="text-lg font-semibold">Select a case</h3></div>
+                <div class="card-content" id="d-body"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-disputes" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let selected = "d1";
+        const renderList = () => {
+          const list = window.AdminData.getDisputes();
+          document.getElementById("dispute-list").innerHTML = list.map(d => `
+            <div class="dispute-row ${selected === d.id ? 'active' : ''}" data-id="${d.id}">
+              <div>
+                <div class="flex items-center gap-2"><strong style="font-size:0.875rem;">${d.title}</strong></div>
+                <p class="text-xs text-muted-foreground" style="margin-top:0.25rem;">${d.owner} vs ${d.provider} · $${d.amount}</p>
+                <p class="text-xs text-muted-foreground">Opened ${d.opened}</p>
+              </div>
+              <span class="sev-pill ${d.priority}">${d.priority}</span>
+            </div>
+          `).join("");
+        };
+
+        const renderDetail = () => {
+          const d = window.AdminData.getDispute(selected);
+          if (!d) return;
+          document.getElementById("d-header").innerHTML = `
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg font-semibold">${d.title}</h3>
+                <p class="card-description">${d.owner} vs ${d.provider} · Amount in dispute: $${d.amount}</p>
+              </div>
+              <span class="sev-pill ${d.priority}">${d.priority}</span>
+            </div>
+          `;
+          document.getElementById("d-body").innerHTML = `
+            <div class="space-y-4">
+              <div class="dispute-chat">
+                ${d.timeline.slice().reverse().map(t => {
+                  const role = t.actor.toLowerCase().includes("mediator") ? "mediator" : t.actor === d.owner.split(" ")[0] + " " + (d.owner.split(" ")[1] || "") || t.actor.includes(d.owner.split(" ")[0]) ? "owner" : "provider";
+                  return `
+                    <div class="chat-bubble ${role}">
+                      <small>${t.actor} · ${t.time}</small>
+                      ${t.note}
+                    </div>
+                  `;
+                }).join("")}
+              </div>
+              ${d.photos.length ? `<div class="grid grid-4">${d.photos.map(p => `<img src="${p}" style="border-radius:0.5rem;width:100%;height:6rem;object-fit:cover;"/>`).join("")}</div>` : ''}
+              <div class="space-y-2">
+                <label class="label">Mediator note</label>
+                <textarea class="textarea" rows="2" id="med-note" placeholder="Add a neutral note..."></textarea>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button class="btn btn-primary" data-resolve="Refund owner from escrow"><i data-lucide="undo-2" class="i-4"></i> Refund owner</button>
+                <button class="btn btn-outline" data-resolve="50/50 split between parties"><i data-lucide="split" class="i-4"></i> 50/50 split</button>
+                <button class="btn btn-outline" data-resolve="Release funds to provider"><i data-lucide="check" class="i-4"></i> Side with provider</button>
+                <button class="btn btn-ghost" data-resolve="Escalate to legal review"><i data-lucide="gavel" class="i-4"></i> Escalate</button>
+              </div>
+            </div>
+          `;
+          if (window.renderIcons) window.renderIcons();
+        };
+        renderList();
+        renderDetail();
+
+        document.getElementById("dispute-list").addEventListener("click", (e) => {
+          const r = e.target.closest("[data-id]");
+          if (r) { selected = r.dataset.id; renderList(); renderDetail(); }
+        });
+        document.getElementById("d-body").addEventListener("click", (e) => {
+          const r = e.target.closest("[data-resolve]");
+          if (r) { window.AdminData.resolveDispute(selected, r.dataset.resolve); window.showToast("Resolution recorded", r.dataset.resolve); renderDetail(); }
+        });
+      });
+    </script>
+  </body>
+</html>

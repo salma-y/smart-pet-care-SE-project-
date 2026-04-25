@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Escrow Management — PetWell Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Escrow Management</h1>
+                <p>Function #35 — funds held until service completion or dispute resolution.</p>
+              </div>
+              <button class="btn btn-primary btn-sm"><i data-lucide="download" class="i-4"></i> Export ledger</button>
+            </div>
+
+            <div class="grid grid-4">
+              <div class="stat-card"><div class="stat-icon" style="background:#fef9c3;color:#a16207;"><i data-lucide="wallet" class="i-5"></i></div><div class="stat-value">$48,210</div><div class="stat-label">Total in escrow</div></div>
+              <div class="stat-card"><div class="stat-icon" style="background:#dbeafe;color:#2563eb;"><i data-lucide="clock" class="i-5"></i></div><div class="stat-value">38</div><div class="stat-label">Held transactions</div></div>
+              <div class="stat-card"><div class="stat-icon" style="background:#dcfce7;color:#15803d;"><i data-lucide="check-circle" class="i-5"></i></div><div class="stat-value">5</div><div class="stat-label">Ready to release</div></div>
+              <div class="stat-card"><div class="stat-icon" style="background:#fee2e2;color:#b91c1c;"><i data-lucide="alert-triangle" class="i-5"></i></div><div class="stat-value">2</div><div class="stat-label">Frozen (in dispute)</div></div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Escrow Transactions</h3></div>
+              <div class="card-content" style="padding:0;">
+                <table class="table-clean">
+                  <thead><tr><th>Service</th><th>Owner → Provider</th><th>Amount</th><th>Auto-release</th><th>State</th><th></th></tr></thead>
+                  <tbody id="rows"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-escrow" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const stateBadge = (s) => {
+          if (s === "Holding") return '<span class="badge badge-amber">Holding</span>';
+          if (s === "Releasing") return '<span class="badge badge-primary">Releasing</span>';
+          if (s === "Released") return '<span class="badge badge-green">Released</span>';
+          if (s === "Frozen") return '<span class="badge badge-red">Frozen</span>';
+          return s;
+        };
+        const render = () => {
+          document.getElementById("rows").innerHTML = window.AdminData.getEscrow().map(e => `
+            <tr>
+              <td><strong>${e.service}</strong></td>
+              <td>${e.owner} <i data-lucide="arrow-right" class="i-3" style="vertical-align:middle;color:var(--muted-foreground);"></i> ${e.provider}</td>
+              <td><strong>$${e.amount.toFixed(2)}</strong></td>
+              <td><span class="countdown-pill"><i data-lucide="timer" class="i-3"></i> ${e.releaseAt}</span></td>
+              <td>${stateBadge(e.state)}</td>
+              <td style="text-align:right;">
+                ${e.state === "Released" ? '' : `<button class="btn btn-primary btn-sm" data-release="${e.id}"><i data-lucide="send" class="i-3"></i> Release now</button>`}
+              </td>
+            </tr>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        render();
+        document.getElementById("rows").addEventListener("click", (e) => {
+          const t = e.target.closest("[data-release]");
+          if (t) { window.AdminData.releaseEscrow(t.dataset.release); window.showToast("Funds released", "Provider will receive the payout in 1–2 business days."); render(); }
+        });
+      });
+    </script>
+  </body>
+</html>

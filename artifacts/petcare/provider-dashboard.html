@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Provider Dashboard — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Good afternoon, Hannah</h1>
+                <p>You have 6 bookings today and 3 new requests waiting.</p>
+              </div>
+              <div class="flex gap-2">
+                <a href="provider-incident.html" class="btn btn-outline btn-sm"><i data-lucide="shield-alert" class="i-4"></i> Report Incident</a>
+                <a href="provider-tracker.html" class="btn btn-primary btn-sm"><i data-lucide="map-pin" class="i-4"></i> Open Active Session</a>
+              </div>
+            </div>
+
+            <!-- Earnings stats -->
+            <div class="grid grid-4">
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#dcfce7;color:#15803d;"><i data-lucide="dollar-sign" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 18%</span>
+                </div>
+                <div class="stat-value">$168</div>
+                <div class="stat-label">Earnings today</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#dbeafe;color:#2563eb;"><i data-lucide="trending-up" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 9%</span>
+                </div>
+                <div class="stat-value">$1,244</div>
+                <div class="stat-label">This week</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#f3e8ff;color:#a855f7;"><i data-lucide="calendar" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> $312</span>
+                </div>
+                <div class="stat-value">$4,980</div>
+                <div class="stat-label">This month</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#fef9c3;color:#a16207;"><i data-lucide="bell" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 3</span>
+                </div>
+                <div class="stat-value">3</div>
+                <div class="stat-label">Pending requests</div>
+              </div>
+            </div>
+
+            <!-- Cert badges -->
+            <div class="card card-soft">
+              <div class="card-header">
+                <h3 class="text-lg font-semibold">Your Certifications <span class="text-sm text-muted-foreground" style="font-weight:500;">— Function #26</span></h3>
+              </div>
+              <div class="card-content">
+                <div class="flex gap-2 flex-wrap" id="cert-badges"></div>
+              </div>
+            </div>
+
+            <div class="grid grid-2">
+              <!-- Today's bookings timeline -->
+              <div class="card card-soft">
+                <div class="card-header flex items-center justify-between">
+                  <div>
+                    <h3 class="text-lg font-semibold">Today's Timeline</h3>
+                    <p class="card-description">6 services scheduled</p>
+                  </div>
+                  <a href="provider-bookings.html" class="btn btn-ghost btn-sm">All bookings <i data-lucide="chevron-right" class="i-4"></i></a>
+                </div>
+                <div class="card-content">
+                  <div class="schedule-list" id="timeline"></div>
+                </div>
+              </div>
+
+              <!-- Pending requests -->
+              <div class="card card-soft">
+                <div class="card-header">
+                  <h3 class="text-lg font-semibold">Pending Booking Requests</h3>
+                  <p class="card-description">Respond within 4 hours to keep your acceptance rate up.</p>
+                </div>
+                <div class="card-content space-y-3" id="requests-list"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "provider-dashboard" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/provider-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const certs = window.ProviderData.getCertifications().filter(c => c.state === "verified");
+        document.getElementById("cert-badges").innerHTML = certs.map(c => `
+          <span class="badge badge-primary"><i data-lucide="badge-check" class="i-3"></i> ${c.type}</span>
+        `).join("");
+
+        const bookings = window.ProviderData.getTodayBookings();
+        document.getElementById("timeline").innerHTML = bookings.map(b => {
+          const cls = b.status === "Completed" ? "completed" : b.status === "In Progress" ? "in-progress" : "upcoming";
+          const badge = b.status === "Completed" ? "badge badge-green" : b.status === "In Progress" ? "badge badge-amber" : "badge badge-outline";
+          return `
+            <div class="schedule-item">
+              <div class="schedule-time">${b.time}<small>${b.duration} min</small></div>
+              <div class="schedule-bar ${cls}"></div>
+              <div class="schedule-info">
+                <h4>${b.petName} <span class="text-muted-foreground" style="font-weight:500;">— ${b.ownerName}</span></h4>
+                <p>${b.service} · ${b.address}</p>
+              </div>
+              <span class="${badge}">${b.status}</span>
+            </div>
+          `;
+        }).join("");
+
+        const requests = window.ProviderData.getPendingRequests();
+        const renderRequests = () => {
+          const list = window.ProviderData.getPendingRequests();
+          document.getElementById("requests-list").innerHTML = list.length === 0
+            ? `<div class="empty-state"><div class="empty-state-icon"><i data-lucide="inbox" class="i-5"></i></div><p>All caught up!</p></div>`
+            : list.map(r => `
+              <div class="request-card" data-id="${r.id}">
+                <div class="flex items-center justify-between gap-2">
+                  <strong style="font-size: 0.9375rem;">${r.petName} <span class="text-muted-foreground" style="font-weight:500;">— ${r.ownerName}</span></strong>
+                  <span class="text-xs text-muted-foreground">${r.sentAt}</span>
+                </div>
+                <div class="request-meta">
+                  <span><i data-lucide="briefcase" class="i-3"></i> ${r.service}</span>
+                  <span><i data-lucide="calendar" class="i-3"></i> ${r.date}</span>
+                  <span><i data-lucide="dollar-sign" class="i-3"></i> $${r.price}</span>
+                </div>
+                <p class="text-sm text-muted-foreground">${r.notes}</p>
+                <div class="request-card-actions">
+                  <button class="btn btn-primary btn-sm" data-accept="${r.id}"><i data-lucide="check" class="i-4"></i> Accept</button>
+                  <button class="btn btn-outline btn-sm" data-decline="${r.id}"><i data-lucide="x" class="i-4"></i> Decline</button>
+                </div>
+              </div>
+            `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        renderRequests();
+        document.getElementById("requests-list").addEventListener("click", (e) => {
+          const a = e.target.closest("[data-accept]");
+          const d = e.target.closest("[data-decline]");
+          if (a) { window.ProviderData.acceptRequest(a.dataset.accept); window.showToast("Accepted", "Booking confirmed and added to your timeline."); renderRequests(); }
+          if (d) { window.ProviderData.declineRequest(d.dataset.decline); window.showToast("Declined", "We let the owner know."); renderRequests(); }
+        });
+
+        if (window.renderIcons) window.renderIcons();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Health Alerts — PetWell Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>System-wide Health Alerts</h1>
+                <p>Function #38 — broadcast vet-grade public health advisories to affected regions.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-2" style="gap:1.5rem; align-items:start;">
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Compose New Alert</h3></div>
+                <div class="card-content space-y-4">
+                  <div><label class="label">Region</label>
+                    <select class="select" id="region">
+                      <option>Bay Area, CA</option>
+                      <option>Pacific Northwest</option>
+                      <option>Midwest</option>
+                      <option>Northeast</option>
+                      <option>Nationwide</option>
+                    </select>
+                  </div>
+                  <div><label class="label">Condition</label>
+                    <input type="text" class="input" id="cond" placeholder="e.g., Canine Influenza"/>
+                  </div>
+                  <div><label class="label">Severity</label>
+                    <div class="grid grid-3" style="gap:0.5rem;">
+                      <div class="radio-card selected" data-sev="low">Low</div>
+                      <div class="radio-card" data-sev="medium">Medium</div>
+                      <div class="radio-card" data-sev="high">High</div>
+                    </div>
+                  </div>
+                  <div><label class="label">Message</label>
+                    <textarea class="textarea" rows="3" id="msg" placeholder="Plain-language message owners and vets will see."></textarea>
+                  </div>
+                  <div><label class="label">Auto-expire after</label>
+                    <select class="select" id="expire">
+                      <option value="14">14 days</option>
+                      <option value="30">30 days</option>
+                      <option value="60">60 days</option>
+                      <option value="90">90 days</option>
+                    </select>
+                  </div>
+                  <div class="price-preview" style="background: hsl(160 47% 45% / 0.05);">
+                    <strong>Estimated reach</strong>
+                    <p class="text-sm text-muted-foreground" id="reach">Choose a region to estimate.</p>
+                  </div>
+                  <button class="btn btn-primary w-full" id="publish"><i data-lucide="siren" class="i-4"></i> Publish Alert</button>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div class="card card-soft">
+                  <div class="card-header"><h3 class="text-lg font-semibold">Active Alerts</h3></div>
+                  <div class="card-content space-y-3" id="alerts"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-alerts" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let sev = "low";
+        document.querySelectorAll("[data-sev]").forEach(c => c.addEventListener("click", () => {
+          document.querySelectorAll("[data-sev]").forEach(x => x.classList.remove("selected"));
+          c.classList.add("selected");
+          sev = c.dataset.sev;
+        }));
+        const updateReach = () => {
+          const r = document.getElementById("region").value;
+          const reach = { "Bay Area, CA": 4820, "Pacific Northwest": 12410, "Midwest": 23080, "Northeast": 18620, "Nationwide": 49800 }[r];
+          document.getElementById("reach").textContent = `≈ ${reach.toLocaleString()} owners and vets in the affected area`;
+        };
+        updateReach();
+        document.getElementById("region").addEventListener("change", updateReach);
+
+        const renderAlerts = () => {
+          document.getElementById("alerts").innerHTML = window.AdminData.getHealthAlerts().map(a => `
+            <div class="recall-card severity-${a.severity}">
+              <div class="flex items-center justify-between gap-2">
+                <strong>${a.condition}</strong>
+                <span class="sev-pill ${a.severity}">${a.severity}</span>
+              </div>
+              <p class="text-sm text-muted-foreground"><i data-lucide="map-pin" class="i-3"></i> ${a.region} · reach ${a.reach.toLocaleString()}</p>
+              <p class="text-sm">${a.message}</p>
+              <div class="flex items-center justify-between" style="margin-top:0.5rem;">
+                <span class="text-xs text-muted-foreground">Expires ${a.expiresAt}</span>
+                <button class="btn btn-ghost btn-sm" data-expire="${a.id}"><i data-lucide="x" class="i-3"></i> Expire now</button>
+              </div>
+            </div>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        renderAlerts();
+
+        document.getElementById("publish").addEventListener("click", () => {
+          const cond = document.getElementById("cond").value || "Untitled advisory";
+          const msg = document.getElementById("msg").value || "—";
+          const region = document.getElementById("region").value;
+          const days = parseInt(document.getElementById("expire").value);
+          const reach = { "Bay Area, CA": 4820, "Pacific Northwest": 12410, "Midwest": 23080, "Northeast": 18620, "Nationwide": 49800 }[region];
+          const expiresAt = new Date(Date.now() + days * 86400000).toISOString().slice(0, 10);
+          window.AdminData.addHealthAlert({ id: "ha" + Date.now(), region, condition: cond, severity: sev, message: msg, reach, expiresAt, active: true });
+          window.showToast("Alert published", `Reaching ≈ ${reach.toLocaleString()} users.`);
+          renderAlerts();
+        });
+        document.getElementById("alerts").addEventListener("click", (e) => {
+          const t = e.target.closest("[data-expire]");
+          if (t) { window.AdminData.expireHealthAlert(t.dataset.expire); window.showToast("Alert expired"); renderAlerts(); }
+        });
+      });
+    </script>
+  </body>
+</html>

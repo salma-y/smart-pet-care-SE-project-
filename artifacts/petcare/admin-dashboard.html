@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Platform Overview</h1>
+                <p>Health, growth, and operational signals across PetWell.</p>
+              </div>
+              <div class="flex gap-2">
+                <a href="admin-disputes.html" class="btn btn-outline btn-sm"><i data-lucide="scale" class="i-4"></i> 7 open disputes</a>
+                <a href="admin-alerts.html" class="btn btn-primary btn-sm"><i data-lucide="siren" class="i-4"></i> Publish Health Alert</a>
+              </div>
+            </div>
+
+            <div class="grid grid-4" id="stats"></div>
+
+            <div class="grid grid-2" style="gap:1.5rem;">
+              <div class="card card-soft">
+                <div class="card-header flex items-center justify-between">
+                  <div>
+                    <h3 class="text-lg font-semibold">Bookings — Last 12 Months</h3>
+                    <p class="card-description">Across all service types</p>
+                  </div>
+                  <span class="badge badge-primary">+18% YoY</span>
+                </div>
+                <div class="card-content">
+                  <div class="bar-chart" id="chart"></div>
+                </div>
+              </div>
+
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Open Operations Queue</h3></div>
+                <div class="card-content space-y-3">
+                  <a href="admin-kyc.html" class="quick-action">
+                    <div class="quick-action-icon bg-amber-tint"><i data-lucide="shield-check" class="i-5"></i></div>
+                    <div><h4>4 KYC submissions</h4><p>2 awaiting first review</p></div>
+                    <i data-lucide="chevron-right" class="i-5 text-muted-foreground"></i>
+                  </a>
+                  <a href="admin-disputes.html" class="quick-action">
+                    <div class="quick-action-icon" style="background:#fee2e2;color:#b91c1c;"><i data-lucide="scale" class="i-5"></i></div>
+                    <div><h4>7 open disputes</h4><p>1 high priority — refund requested</p></div>
+                    <i data-lucide="chevron-right" class="i-5 text-muted-foreground"></i>
+                  </a>
+                  <a href="admin-escrow.html" class="quick-action">
+                    <div class="quick-action-icon bg-primary-tint"><i data-lucide="wallet" class="i-5"></i></div>
+                    <div><h4>$48,210 in escrow</h4><p>5 transactions ready to release</p></div>
+                    <i data-lucide="chevron-right" class="i-5 text-muted-foreground"></i>
+                  </a>
+                  <a href="admin-archive.html" class="quick-action">
+                    <div class="quick-action-icon" style="background:#f3e8ff;color:#a855f7;"><i data-lucide="archive" class="i-5"></i></div>
+                    <div><h4>2 archive candidates</h4><p>Inactive 12+ months</p></div>
+                    <i data-lucide="chevron-right" class="i-5 text-muted-foreground"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold">System Health</h3>
+                  <p class="card-description">Last 24 hours</p>
+                </div>
+                <span class="badge badge-green">All systems operational</span>
+              </div>
+              <div class="card-content">
+                <div class="grid grid-4">
+                  <div class="stat-card">
+                    <div class="stat-icon" style="background:#dcfce7;color:#15803d;"><i data-lucide="server" class="i-5"></i></div>
+                    <div class="stat-value">99.98%</div>
+                    <div class="stat-label">API uptime</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-icon" style="background:#dbeafe;color:#2563eb;"><i data-lucide="zap" class="i-5"></i></div>
+                    <div class="stat-value">142 ms</div>
+                    <div class="stat-label">Avg response</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-icon" style="background:#fef9c3;color:#a16207;"><i data-lucide="database" class="i-5"></i></div>
+                    <div class="stat-value">38%</div>
+                    <div class="stat-label">DB capacity</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-icon" style="background:#f3e8ff;color:#a855f7;"><i data-lucide="cpu" class="i-5"></i></div>
+                    <div class="stat-value">14%</div>
+                    <div class="stat-label">CPU load</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-dashboard" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const m = window.AdminData.getMetrics();
+        document.getElementById("stats").innerHTML = `
+          <div class="stat-card"><div class="flex items-center justify-between"><div class="stat-icon" style="background:#dcfce7;color:#15803d;"><i data-lucide="users" class="i-5"></i></div><span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 412</span></div><div class="stat-value">${m.activeUsers.toLocaleString()}</div><div class="stat-label">Active users</div></div>
+          <div class="stat-card"><div class="flex items-center justify-between"><div class="stat-icon" style="background:#dbeafe;color:#2563eb;"><i data-lucide="calendar-check" class="i-5"></i></div><span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 24%</span></div><div class="stat-value">${m.bookingsToday}</div><div class="stat-label">Bookings today</div></div>
+          <div class="stat-card"><div class="flex items-center justify-between"><div class="stat-icon" style="background:#fee2e2;color:#b91c1c;"><i data-lucide="scale" class="i-5"></i></div><span class="stat-delta down"><i data-lucide="arrow-down" class="i-3"></i> 2</span></div><div class="stat-value">${m.openDisputes}</div><div class="stat-label">Open disputes</div></div>
+          <div class="stat-card"><div class="flex items-center justify-between"><div class="stat-icon" style="background:#fef3c7;color:#92400e;"><i data-lucide="alert-triangle" class="i-5"></i></div></div><div class="stat-value">${m.recallAlerts}</div><div class="stat-label">Active recall alerts</div></div>
+        `;
+        const data = [
+          { label: "May", value: 4820 },{ label: "Jun", value: 5240 },{ label: "Jul", value: 5910 },{ label: "Aug", value: 6020 },
+          { label: "Sep", value: 5780 },{ label: "Oct", value: 6310 },{ label: "Nov", value: 6890 },{ label: "Dec", value: 7240 },
+          { label: "Jan", value: 7180 },{ label: "Feb", value: 7510 },{ label: "Mar", value: 8120 },{ label: "Apr", value: 9540 },
+        ];
+        const max = Math.max(...data.map(d => d.value));
+        document.getElementById("chart").innerHTML = data.map(d => `
+          <div class="bar-col"><span class="bar-value">${d.value}</span><div class="bar-fill" style="height:${(d.value / max) * 100}%;"></div><span class="bar-label">${d.label}</span></div>
+        `).join("");
+        if (window.renderIcons) window.renderIcons();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reviews — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Two-way Reviews</h1>
+                <p>Function #31 — owners review you, and you review them. Both sides keep the marketplace honest.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-2" style="gap:1.5rem; align-items: start;">
+              <div class="rating-summary">
+                <span class="rating-num" id="avg">0</span>
+                <div class="review-stars" id="avg-stars"></div>
+                <p style="opacity:0.85;">From <strong id="total">0</strong> verified reviews</p>
+              </div>
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Rating Breakdown</h3></div>
+                <div class="card-content space-y-2" id="breakdown"></div>
+              </div>
+            </div>
+
+            <div class="tabs-list" style="grid-template-columns: repeat(2, 1fr);">
+              <button class="tab active" data-tab="received">Reviews about you</button>
+              <button class="tab" data-tab="given">Reviews you've left</button>
+            </div>
+
+            <div class="tab-content active" id="tab-received">
+              <div class="grid grid-2" id="received-grid" style="gap:1rem;"></div>
+            </div>
+            <div class="tab-content" id="tab-given">
+              <div class="grid grid-2" id="given-grid" style="gap:1rem;"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "provider-reviews" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/provider-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const rv = window.ProviderData.getReviews();
+        document.getElementById("avg").textContent = rv.averageReceived.toFixed(1);
+        document.getElementById("total").textContent = rv.totalReceived;
+        const stars = (n) => {
+          let s = "";
+          for (let i = 1; i <= 5; i++) s += `<i data-lucide="star" class="i-4" style="${i <= Math.round(n) ? 'fill: currentColor;' : 'opacity:0.4;'}"></i>`;
+          return s;
+        };
+        document.getElementById("avg-stars").innerHTML = stars(rv.averageReceived);
+
+        const breakdown = [
+          { stars: 5, count: 70 }, { stars: 4, count: 13 }, { stars: 3, count: 3 }, { stars: 2, count: 1 }, { stars: 1, count: 0 }
+        ];
+        const total = breakdown.reduce((a, b) => a + b.count, 0);
+        document.getElementById("breakdown").innerHTML = breakdown.map(b => `
+          <div class="flex items-center gap-3">
+            <span class="text-sm" style="width:1.75rem; text-align:right; font-weight:600;">${b.stars}★</span>
+            <div class="loyalty-progress" style="flex:1; background: var(--secondary);"><div class="loyalty-progress-bar" style="background: #f59e0b; width:${(b.count / total) * 100}%;"></div></div>
+            <span class="text-sm text-muted-foreground" style="width: 2.25rem; text-align:right;">${b.count}</span>
+          </div>
+        `).join("");
+
+        const renderCards = (arr, target, isReceived) => {
+          document.getElementById(target).innerHTML = arr.map(r => `
+            <div class="review-card">
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <strong>${isReceived ? r.from : r.to}</strong>
+                  ${r.pet ? `<p class="text-xs text-muted-foreground">Pet: ${r.pet}</p>` : ''}
+                </div>
+                <div class="review-stars">${stars(r.rating)}</div>
+              </div>
+              <p class="text-sm">${r.comment}</p>
+              <p class="text-xs text-muted-foreground">${r.date}</p>
+              ${isReceived ? `<button class="btn btn-ghost btn-sm" style="align-self:flex-start;"><i data-lucide="reply" class="i-3"></i> Reply publicly</button>` : ''}
+            </div>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        renderCards(rv.received, "received-grid", true);
+        renderCards(rv.given, "given-grid", false);
+
+        document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+          document.querySelectorAll(".tab-content").forEach(x => x.classList.remove("active"));
+          t.classList.add("active");
+          document.getElementById("tab-" + t.dataset.tab).classList.add("active");
+          if (window.renderIcons) window.renderIcons();
+        }));
+      });
+    </script>
+  </body>
+</html>

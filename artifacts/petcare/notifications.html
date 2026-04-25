@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 64rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Notification Center</h1>
+                <p>All your activity in one inbox — Function #41.</p>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn btn-outline btn-sm" id="mark-all"><i data-lucide="check-check" class="i-4"></i> Mark all read</button>
+                <a href="notifications-escalation.html" class="btn btn-primary btn-sm"><i data-lucide="zap" class="i-4"></i> View Escalation Demo</a>
+              </div>
+            </div>
+
+            <div class="filters-bar">
+              <div class="chip-group">
+                <button class="chip active" data-cat="">All</button>
+                <button class="chip" data-cat="Medical">Medical</button>
+                <button class="chip" data-cat="Marketplace">Marketplace</button>
+                <button class="chip" data-cat="Service">Service</button>
+                <button class="chip" data-cat="System">System</button>
+              </div>
+              <label class="checkbox-row" style="margin-left:auto;"><input type="checkbox" id="unread-only"/> Unread only</label>
+            </div>
+
+            <div class="grid grid-2" style="gap:1.5rem; align-items:start;">
+              <div class="space-y-3" id="notif-list" style="grid-column: 1 / -1;"></div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Channel Preferences</h3><p class="card-description">Choose how you receive each category.</p></div>
+              <div class="card-content">
+                <table class="table-clean">
+                  <thead><tr><th>Category</th><th style="text-align:center;">In-app</th><th style="text-align:center;">Email</th><th style="text-align:center;">SMS</th></tr></thead>
+                  <tbody id="prefs"></tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "notifications" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let cat = "", unreadOnly = false;
+        const renderNotifs = () => {
+          const list = window.NotifData.getNotifications().filter(n =>
+            (!cat || n.type === cat) && (!unreadOnly || !n.read)
+          );
+          document.getElementById("notif-list").innerHTML = list.length === 0
+            ? `<div class="empty-state"><div class="empty-state-icon"><i data-lucide="inbox" class="i-5"></i></div><p>You're all caught up!</p></div>`
+            : list.map(n => `
+              <div class="notif-row ${n.read ? '' : 'unread'}" data-id="${n.id}">
+                <div class="notif-icon ${n.color}"><i data-lucide="${n.icon}" class="i-5"></i></div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <strong style="font-size:0.9375rem;">${n.title}</strong>
+                    <span class="badge badge-secondary">${n.type}</span>
+                  </div>
+                  <p class="text-sm text-muted-foreground" style="margin-top:0.25rem;">${n.body}</p>
+                  <p class="notif-meta">${n.time} · ${n.channel}</p>
+                </div>
+                ${n.read ? '' : '<button class="btn btn-ghost btn-sm" data-mark="' + n.id + '"><i data-lucide="check" class="i-4"></i></button>'}
+              </div>
+            `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        const renderPrefs = () => {
+          const p = window.NotifData.getPreferences();
+          document.getElementById("prefs").innerHTML = Object.keys(p).map(c => `
+            <tr>
+              <td><strong>${c}</strong></td>
+              ${["app", "email", "sms"].map(ch => `
+                <td style="text-align:center;">
+                  <label class="switch"><input type="checkbox" data-pref-cat="${c}" data-pref-ch="${ch}" ${p[c][ch] ? 'checked' : ''}/><span class="slider-toggle"></span></label>
+                </td>
+              `).join("")}
+            </tr>
+          `).join("");
+        };
+        renderNotifs();
+        renderPrefs();
+
+        document.querySelectorAll("[data-cat]").forEach(c => c.addEventListener("click", () => {
+          document.querySelectorAll("[data-cat]").forEach(x => x.classList.remove("active"));
+          c.classList.add("active");
+          cat = c.dataset.cat;
+          renderNotifs();
+        }));
+        document.getElementById("unread-only").addEventListener("change", (e) => { unreadOnly = e.target.checked; renderNotifs(); });
+        document.getElementById("mark-all").addEventListener("click", () => { window.NotifData.markAllRead(); renderNotifs(); window.showToast("Inbox cleared", "All marked as read."); });
+        document.getElementById("notif-list").addEventListener("click", (e) => {
+          const t = e.target.closest("[data-mark]");
+          if (t) { window.NotifData.markRead(t.dataset.mark); renderNotifs(); }
+        });
+        document.getElementById("prefs").addEventListener("change", (e) => {
+          const t = e.target.closest("[data-pref-cat]");
+          if (t) { window.NotifData.setPreference(t.dataset.prefCat, t.dataset.prefCh, t.checked); window.showToast("Preference saved"); }
+        });
+      });
+    </script>
+  </body>
+</html>

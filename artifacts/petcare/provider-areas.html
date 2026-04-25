@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Areas — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Service Areas</h1>
+                <p>Define the geofences where you accept bookings — Function #22.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="add-zone"><i data-lucide="plus" class="i-4"></i> Add Zone</button>
+            </div>
+
+            <div class="grid grid-2" style="gap:1.5rem;">
+              <div class="card card-soft" style="grid-column: 1 / -1;">
+                <div class="card-header">
+                  <h3 class="text-lg font-semibold">Coverage Map</h3>
+                  <p class="card-description">Drag zones on the map (visual only). Toggle zones on/off below.</p>
+                </div>
+                <div class="card-content">
+                  <div class="map-canvas" id="map">
+                    <svg viewBox="0 0 600 360" preserveAspectRatio="xMidYMid slice">
+                      <g class="map-grid">
+                        <line x1="0" y1="60" x2="600" y2="60"/><line x1="0" y1="120" x2="600" y2="120"/>
+                        <line x1="0" y1="180" x2="600" y2="180"/><line x1="0" y1="240" x2="600" y2="240"/>
+                        <line x1="0" y1="300" x2="600" y2="300"/>
+                        <line x1="100" y1="0" x2="100" y2="360"/><line x1="200" y1="0" x2="200" y2="360"/>
+                        <line x1="300" y1="0" x2="300" y2="360"/><line x1="400" y1="0" x2="400" y2="360"/>
+                        <line x1="500" y1="0" x2="500" y2="360"/>
+                      </g>
+                      <path class="map-road-edge" d="M 0 200 Q 200 180 320 220 T 600 200"/>
+                      <path class="map-road" d="M 0 200 Q 200 180 320 220 T 600 200"/>
+                      <path class="map-road-edge" d="M 280 0 Q 300 100 260 200 Q 240 280 280 360"/>
+                      <path class="map-road" d="M 280 0 Q 300 100 260 200 Q 240 280 280 360"/>
+                      <g id="zones"></g>
+                    </svg>
+                    <div class="map-legend">
+                      <div class="map-legend-item"><span class="map-legend-dot" style="background:#2dd4bf"></span> Downtown</div>
+                      <div class="map-legend-item"><span class="map-legend-dot" style="background:#a855f7"></span> Riverside</div>
+                      <div class="map-legend-item"><span class="map-legend-dot" style="background:#f59e0b"></span> Oak Park</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card card-soft" style="grid-column: 1 / -1;">
+                <div class="card-header"><h3 class="text-lg font-semibold">Active Service Areas</h3></div>
+                <div class="card-content">
+                  <table class="table-clean">
+                    <thead><tr><th>Zone</th><th>Radius</th><th>Status</th><th></th></tr></thead>
+                    <tbody id="zone-rows"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "provider-areas" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/provider-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const renderAll = () => {
+          const zones = window.ProviderData.getServiceZones();
+          document.getElementById("zones").innerHTML = zones.map(z => `
+            <circle cx="${z.coords.x * 6}" cy="${z.coords.y * 3.6}" r="${z.coords.r}" class="map-zone ${z.active ? '' : 'inactive'}" fill="${z.color}" stroke="${z.color}"/>
+            <text x="${z.coords.x * 6}" y="${z.coords.y * 3.6 + 4}" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">${z.name.split(' ')[0]}</text>
+          `).join("");
+          document.getElementById("zone-rows").innerHTML = zones.map(z => `
+            <tr>
+              <td><strong>${z.name}</strong></td>
+              <td>${z.radiusMi} mi</td>
+              <td><span class="badge ${z.active ? 'badge-green' : 'badge-secondary'}">${z.active ? 'Active' : 'Paused'}</span></td>
+              <td style="text-align:right;">
+                <label class="switch"><input type="checkbox" data-toggle="${z.id}" ${z.active ? 'checked' : ''}/><span class="slider-toggle"></span></label>
+                <button class="btn btn-ghost btn-sm" data-remove="${z.id}" style="margin-left:0.5rem;"><i data-lucide="trash-2" class="i-4"></i></button>
+              </td>
+            </tr>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        renderAll();
+        document.getElementById("zone-rows").addEventListener("click", (e) => {
+          const t = e.target.closest("[data-toggle]");
+          const r = e.target.closest("[data-remove]");
+          if (t) { window.ProviderData.toggleZone(t.dataset.toggle); window.showToast("Zone updated"); renderAll(); }
+          if (r) { window.ProviderData.removeZone(r.dataset.remove); window.showToast("Zone removed"); renderAll(); }
+        });
+        document.getElementById("add-zone").addEventListener("click", () => {
+          const name = prompt("Zone name?", "New Zone");
+          if (!name) return;
+          const radius = parseFloat(prompt("Radius in miles?", "2") || "2");
+          window.ProviderData.addZone({ id: "z" + Date.now(), name, radiusMi: radius, active: true, color: "#22c55e", coords: { x: 50, y: 50, r: 50 } });
+          renderAll();
+          window.showToast("Zone added");
+        });
+      });
+    </script>
+  </body>
+</html>

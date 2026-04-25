@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notification Escalation — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Multi-channel Escalation</h1>
+                <p>Function #42 — when a critical reminder is ignored, PetWell escalates the channel automatically.</p>
+              </div>
+              <a href="notifications.html" class="btn btn-outline btn-sm"><i data-lucide="arrow-left" class="i-4"></i> Back to Inbox</a>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">How escalation works</h3></div>
+              <div class="card-content space-y-3">
+                <p class="text-sm">For every critical health reminder we attempt the lowest-friction channel first. If the recipient does not engage within the configured threshold, we escalate.</p>
+                <div class="grid grid-3">
+                  <div class="cert-card">
+                    <div class="cert-icon"><i data-lucide="bell" class="i-5"></i></div>
+                    <div><strong>1 · App push</strong><p class="text-xs text-muted-foreground">No charge · 2 hr threshold</p></div>
+                    <span></span>
+                  </div>
+                  <div class="cert-card">
+                    <div class="cert-icon"><i data-lucide="mail" class="i-5"></i></div>
+                    <div><strong>2 · Email</strong><p class="text-xs text-muted-foreground">No charge · 24 hr threshold</p></div>
+                    <span></span>
+                  </div>
+                  <div class="cert-card">
+                    <div class="cert-icon"><i data-lucide="message-square" class="i-5"></i></div>
+                    <div><strong>3 · SMS</strong><p class="text-xs text-muted-foreground">SMS rates apply · final attempt</p></div>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4" id="escalations"></div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "notifications-escalation" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const render = () => {
+          const list = window.NotifData.getEscalations();
+          document.getElementById("escalations").innerHTML = list.map(e => `
+            <div class="card card-soft">
+              <div class="card-header flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold">${e.reminder}</h3>
+                  <p class="card-description">Owner last seen ${e.ownerLastSeen}</p>
+                </div>
+                <span class="badge badge-amber">Currently on ${e.currentChannel}</span>
+              </div>
+              <div class="card-content space-y-3">
+                <div class="escalation-track">
+                  ${e.path.map((node, i) => `
+                    <div class="esc-node ${i + 1 < e.step ? 'complete' : i + 1 === e.step ? 'active' : ''}">
+                      <i data-lucide="${node.includes('Push') ? 'bell' : node.includes('Email') ? 'mail' : 'message-square'}" class="i-4"></i>
+                      <span style="font-size:0.75rem; font-weight:600;">${node}</span>
+                    </div>
+                    ${i < e.path.length - 1 ? `<span class="esc-arrow ${i + 1 < e.step ? 'complete' : ''}"></span>` : ''}
+                  `).join("")}
+                </div>
+                <div class="flex justify-end gap-2">
+                  <button class="btn btn-outline btn-sm" data-replay="${e.id}"><i data-lucide="rotate-cw" class="i-4"></i> Replay simulation</button>
+                  <button class="btn btn-primary btn-sm" data-advance="${e.id}"><i data-lucide="chevron-right" class="i-4"></i> Manually advance</button>
+                </div>
+              </div>
+            </div>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        render();
+        document.getElementById("escalations").addEventListener("click", (e) => {
+          if (e.target.closest("[data-replay]")) window.showToast("Replay started", "Watch the channel badges advance every 2s.");
+          if (e.target.closest("[data-advance]")) window.showToast("Channel advanced", "Next escalation step queued.");
+        });
+      });
+    </script>
+  </body>
+</html>

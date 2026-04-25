@@ -11,11 +11,15 @@
   const ownerPages = ["dashboard", "pets", "pet-detail", "symptom-checker", "appointments", "appointments-new", "lost-pets"];
   const vetPages = ["vet-dashboard", "vet-patients", "vet-consultation", "vet-prescription", "vet-lab-upload", "vet-referral", "vet-surgery", "vet-income"];
   const marketplacePages = ["marketplace", "marketplace-product", "cart", "subscriptions", "loyalty", "recalls"];
+  const providerPages = ["provider-dashboard", "provider-areas", "provider-bookings", "provider-pricing", "provider-tracker", "provider-incident", "provider-checkin", "provider-briefing", "provider-earnings", "provider-certifications", "provider-reviews"];
+  const adminPages = ["admin-dashboard", "admin-users", "admin-kyc", "admin-disputes", "admin-escrow", "admin-audit", "admin-archive", "admin-alerts", "admin-rbac"];
 
   const isOwner = ownerPages.includes(pageInfo.id);
   const isVet = vetPages.includes(pageInfo.id);
   const isMarketplace = marketplacePages.includes(pageInfo.id);
-  const showSidebar = isOwner || isVet || isMarketplace;
+  const isProvider = providerPages.includes(pageInfo.id);
+  const isAdmin = adminPages.includes(pageInfo.id);
+  const showSidebar = isOwner || isVet || isMarketplace || isProvider || isAdmin;
 
   // ---------- TopNav ----------
   function renderTopNav() {
@@ -23,12 +27,19 @@
     const links = [
       { name: "Pet Owner", path: "dashboard.html", active: isOwner },
       { name: "Veterinarian", path: "vet-dashboard.html", active: isVet },
-      { name: "Service Provider", path: "coming-soon.html" },
+      { name: "Service Provider", path: "provider-dashboard.html", active: isProvider },
       { name: "Marketplace", path: "marketplace.html", active: isMarketplace },
-      { name: "Admin", path: "coming-soon.html" },
+      { name: "Admin", path: "admin-dashboard.html", active: isAdmin },
     ];
 
     const cartCount = (window.VetData ? window.VetData.getCart() : []).reduce((a, b) => a + b.quantity, 0);
+    const unreadCount = window.NotifData ? window.NotifData.getNotifications().filter((n) => !n.read).length : 3;
+
+    let userName = "Jane Doe";
+    let userEmail = "jane.doe@example.com";
+    if (isVet) { userName = "Dr. Sarah Jenkins"; userEmail = "sarah.jenkins@petwell.vet"; }
+    else if (isProvider) { userName = "Hannah Wilson"; userEmail = "hannah@petwell.io"; }
+    else if (isAdmin) { userName = "Jordan Avery"; userEmail = "jordan.a@petwell.admin"; }
 
     return `
       <header class="topnav">
@@ -46,29 +57,30 @@
           </div>
 
           <div class="flex items-center gap-2">
-            <button class="icon-btn md:flex hidden" aria-label="Search">
+            <a href="search.html" class="icon-btn md:flex hidden" aria-label="Search">
               <i data-lucide="search" class="i-5"></i>
-            </button>
+            </a>
             <a href="cart.html" class="icon-btn relative" aria-label="Cart">
               <i data-lucide="shopping-cart" class="i-5"></i>
               ${cartCount > 0 ? `<span class="cart-badge">${cartCount}</span>` : ""}
             </a>
-            <button class="icon-btn relative" aria-label="Notifications">
+            <a href="notifications.html" class="icon-btn relative" aria-label="Notifications">
               <i data-lucide="bell" class="i-5"></i>
-              <span class="notif-dot"></span>
-            </button>
+              ${unreadCount > 0 ? `<span class="notif-dot"></span>` : ""}
+            </a>
             <div class="dropdown" id="user-dropdown">
               <button class="avatar-btn" data-dropdown-toggle="user-dropdown" aria-label="Open user menu">
                 <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="User">
               </button>
               <div class="dropdown-menu">
                 <div class="dropdown-label">
-                  <p class="text-sm font-medium">${isVet ? "Dr. Sarah Jenkins" : "Jane Doe"}</p>
-                  <p class="text-xs text-muted-foreground">${isVet ? "sarah.jenkins@petwell.vet" : "jane.doe@example.com"}</p>
+                  <p class="text-sm font-medium">${userName}</p>
+                  <p class="text-xs text-muted-foreground">${userEmail}</p>
                 </div>
                 <div class="dropdown-separator"></div>
                 <a href="coming-soon.html" class="dropdown-item">Profile</a>
                 <a href="coming-soon.html" class="dropdown-item">Settings</a>
+                <a href="notifications.html" class="dropdown-item">Notifications</a>
                 <a href="loyalty.html" class="dropdown-item">Loyalty Points</a>
                 <div class="dropdown-separator"></div>
                 <a href="login.html" class="dropdown-item">Log out</a>
@@ -101,6 +113,40 @@
       helpText = "Connect with a specialist for a second opinion.";
       helpHref = "vet-referral.html";
       helpCta = "Send Referral";
+    } else if (isProvider) {
+      items = [
+        { name: "Dashboard", href: "provider-dashboard.html", icon: "layout-dashboard", id: "provider-dashboard" },
+        { name: "Bookings", href: "provider-bookings.html", icon: "calendar-check", id: "provider-bookings" },
+        { name: "Active Session", href: "provider-tracker.html", icon: "map-pin", id: "provider-tracker" },
+        { name: "Service Areas", href: "provider-areas.html", icon: "map", id: "provider-areas" },
+        { name: "Pricing", href: "provider-pricing.html", icon: "dollar-sign", id: "provider-pricing" },
+        { name: "Briefings", href: "provider-briefing.html", icon: "clipboard-list", id: "provider-briefing" },
+        { name: "Check-In QR", href: "provider-checkin.html", icon: "qr-code", id: "provider-checkin" },
+        { name: "Incident Report", href: "provider-incident.html", icon: "shield-alert", id: "provider-incident" },
+        { name: "Earnings", href: "provider-earnings.html", icon: "trending-up", id: "provider-earnings" },
+        { name: "Certifications", href: "provider-certifications.html", icon: "badge-check", id: "provider-certifications" },
+        { name: "Reviews", href: "provider-reviews.html", icon: "star", id: "provider-reviews" },
+      ];
+      helpTitle = "Boost your rating";
+      helpText = "Owners value timely updates. Send one in your active session.";
+      helpHref = "provider-tracker.html";
+      helpCta = "Open Tracker";
+    } else if (isAdmin) {
+      items = [
+        { name: "Admin Dashboard", href: "admin-dashboard.html", icon: "layout-dashboard", id: "admin-dashboard" },
+        { name: "Users", href: "admin-users.html", icon: "users", id: "admin-users" },
+        { name: "KYC Review", href: "admin-kyc.html", icon: "shield-check", id: "admin-kyc" },
+        { name: "Disputes", href: "admin-disputes.html", icon: "scale", id: "admin-disputes" },
+        { name: "Escrow", href: "admin-escrow.html", icon: "wallet", id: "admin-escrow" },
+        { name: "Health Alerts", href: "admin-alerts.html", icon: "siren", id: "admin-alerts" },
+        { name: "Audit Log", href: "admin-audit.html", icon: "file-search", id: "admin-audit" },
+        { name: "Archive Manager", href: "admin-archive.html", icon: "archive", id: "admin-archive" },
+        { name: "Permissions (RBAC)", href: "admin-rbac.html", icon: "lock", id: "admin-rbac" },
+      ];
+      helpTitle = "Disputes need attention";
+      helpText = "7 open cases — review the highest priority items first.";
+      helpHref = "admin-disputes.html";
+      helpCta = "Open Disputes";
     } else if (isMarketplace) {
       items = [
         { name: "Browse", href: "marketplace.html", icon: "store", id: "marketplace" },
@@ -173,15 +219,17 @@
               <ul>
                 <li><a href="dashboard.html">Pet Owners</a></li>
                 <li><a href="vet-dashboard.html">Veterinarians</a></li>
+                <li><a href="provider-dashboard.html">Service Providers</a></li>
                 <li><a href="marketplace.html">Marketplace</a></li>
               </ul>
             </div>
             <div>
               <h4>Support</h4>
               <ul>
+                <li><a href="search.html">Global Search</a></li>
+                <li><a href="notifications.html">Notifications</a></li>
+                <li><a href="style-guide.html">Style Guide</a></li>
                 <li><a href="coming-soon.html">Help Center</a></li>
-                <li><a href="coming-soon.html">Contact Us</a></li>
-                <li><a href="coming-soon.html">Emergency</a></li>
               </ul>
             </div>
             <div>
@@ -189,7 +237,7 @@
               <ul>
                 <li><a href="coming-soon.html">Privacy Policy</a></li>
                 <li><a href="coming-soon.html">Terms of Service</a></li>
-                <li><a href="coming-soon.html">Cookie Policy</a></li>
+                <li><a href="admin-audit.html">Audit Log</a></li>
               </ul>
             </div>
           </div>

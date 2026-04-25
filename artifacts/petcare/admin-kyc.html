@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KYC Review — PetWell Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>KYC / Verification</h1>
+                <p>Review identity documents and license submissions — Function #33.</p>
+              </div>
+            </div>
+
+            <div class="kyc-layout">
+              <div class="card card-soft" style="padding:0; overflow:hidden;">
+                <div class="card-header" style="padding:1rem;"><h3 class="text-base font-semibold">Submission Queue</h3></div>
+                <div id="queue" style="display:flex; flex-direction:column;"></div>
+              </div>
+
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold" id="detail-title">Select a submission</h3><p class="card-description" id="detail-sub"></p></div>
+                <div class="card-content" id="detail-body"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-kyc" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let selected = null;
+        const statusBadge = (s) => {
+          const map = { submitted: ['amber', 'Submitted'], pending: ['amber', 'Pending'], more_info: ['amber', 'Needs info'], verified: ['green', 'Approved'], rejected: ['red', 'Rejected'] };
+          const [c, l] = map[s] || ['secondary', s];
+          return `<span class="badge badge-${c}">${l}</span>`;
+        };
+
+        const renderQueue = () => {
+          const subs = window.AdminData.getKycSubmissions();
+          document.getElementById("queue").innerHTML = subs.map(s => `
+            <div class="dispute-row ${selected === s.id ? 'active' : ''}" data-id="${s.id}" style="border-radius:0; border:0; border-bottom: 1px solid var(--border);">
+              <div>
+                <strong style="font-size:0.875rem;">${s.userName}</strong>
+                <p class="text-xs text-muted-foreground">${s.role} · ${s.submitted}</p>
+              </div>
+              ${statusBadge(s.status)}
+            </div>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+
+        const renderDetail = () => {
+          const s = window.AdminData.getKycSubmissions().find(x => x.id === selected);
+          if (!s) {
+            document.getElementById("detail-title").textContent = "Select a submission";
+            document.getElementById("detail-sub").textContent = "Pick one from the queue to begin review.";
+            document.getElementById("detail-body").innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i data-lucide="shield-check" class="i-5"></i></div><p>No submission selected.</p></div>`;
+            if (window.renderIcons) window.renderIcons();
+            return;
+          }
+          document.getElementById("detail-title").textContent = s.userName;
+          document.getElementById("detail-sub").textContent = `${s.role} · Submitted ${s.submitted}`;
+          document.getElementById("detail-body").innerHTML = `
+            <div class="grid grid-2" style="gap:1.5rem;">
+              <div class="space-y-3">
+                <strong>Documents (${s.documents.length})</strong>
+                <div class="doc-viewer">
+                  <div class="doc-frame">
+                    <div style="display:flex; gap:0.75rem;">
+                      <div class="doc-photo"></div>
+                      <div style="flex:1;">
+                        <div class="doc-line long"></div>
+                        <div class="doc-line med"></div>
+                        <div class="doc-line short"></div>
+                        <div class="doc-line med"></div>
+                        <div class="doc-line long"></div>
+                      </div>
+                    </div>
+                    <div style="margin-top:0.75rem;"><div class="doc-line short"></div><div class="doc-line med"></div></div>
+                  </div>
+                  <div class="text-xs text-muted-foreground" style="text-align:center;">${s.documents.join(" · ")}</div>
+                </div>
+              </div>
+              <div class="space-y-3">
+                <strong>History</strong>
+                <div class="audit-trail">
+                  ${s.history.map(h => `
+                    <div class="audit-item">
+                      <strong style="font-size:0.875rem;">${h.action}</strong>
+                      <p class="text-xs text-muted-foreground">${h.actor} · ${h.at}</p>
+                    </div>
+                  `).join("")}
+                </div>
+                <div class="space-y-2">
+                  <label class="label">Decision notes (visible to user)</label>
+                  <textarea class="textarea" rows="3" placeholder="Optional message..."></textarea>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn btn-primary" data-action="verified"><i data-lucide="check" class="i-4"></i> Approve</button>
+                  <button class="btn btn-outline" data-action="more_info"><i data-lucide="message-square" class="i-4"></i> More info</button>
+                  <button class="btn btn-destructive" data-action="rejected"><i data-lucide="x" class="i-4"></i> Reject</button>
+                </div>
+              </div>
+            </div>
+          `;
+          if (window.renderIcons) window.renderIcons();
+        };
+        renderQueue();
+        renderDetail();
+
+        document.getElementById("queue").addEventListener("click", (e) => {
+          const r = e.target.closest("[data-id]");
+          if (r) { selected = r.dataset.id; renderQueue(); renderDetail(); }
+        });
+        document.getElementById("detail-body").addEventListener("click", (e) => {
+          const a = e.target.closest("[data-action]");
+          if (a && selected) {
+            window.AdminData.decideKyc(selected, a.dataset.action);
+            window.showToast("Decision recorded", a.dataset.action.replace("_", " "));
+            renderQueue();
+            renderDetail();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

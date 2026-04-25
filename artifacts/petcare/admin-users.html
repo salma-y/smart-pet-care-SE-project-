@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management — PetWell Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>User Management</h1>
+                <p>Search, audit, and act on accounts across all roles — Function #32.</p>
+              </div>
+              <span class="badge badge-primary" id="count">0 users</span>
+            </div>
+
+            <div class="filters-bar">
+              <div class="search-input">
+                <i data-lucide="search"></i>
+                <input class="input" id="q" placeholder="Search name or email..." />
+              </div>
+              <select class="select" id="f-role" style="max-width:12rem;">
+                <option value="">All roles</option>
+                <option>Pet Owner</option>
+                <option>Veterinarian</option>
+                <option>Service Provider</option>
+              </select>
+              <select class="select" id="f-status" style="max-width:12rem;">
+                <option value="">All statuses</option>
+                <option>Active</option>
+                <option>Suspended</option>
+                <option>Pending</option>
+              </select>
+              <label class="checkbox-row" style="margin-left:auto;"><input type="checkbox" id="f-flag"/> Flagged only</label>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-content" style="padding:0;">
+                <table class="table-clean">
+                  <thead>
+                    <tr><th>User</th><th>Role</th><th>Status</th><th>Rating</th><th>KYC</th><th>Joined</th><th></th></tr>
+                  </thead>
+                  <tbody id="rows"></tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-users" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const kycBadge = (k) => {
+          if (k === "verified") return '<span class="badge badge-green"><i data-lucide="badge-check" class="i-3"></i> Verified</span>';
+          if (k === "submitted") return '<span class="badge badge-amber">Submitted</span>';
+          if (k === "pending") return '<span class="badge badge-amber">Pending</span>';
+          if (k === "review") return '<span class="badge badge-amber">Review</span>';
+          if (k === "rejected") return '<span class="badge badge-red">Rejected</span>';
+          return '';
+        };
+        const statusBadge = (s) => {
+          if (s === "Active") return '<span class="badge badge-green">Active</span>';
+          if (s === "Suspended") return '<span class="badge badge-red">Suspended</span>';
+          if (s === "Pending") return '<span class="badge badge-amber">Pending</span>';
+          return '';
+        };
+        const render = () => {
+          const q = document.getElementById("q").value.toLowerCase();
+          const role = document.getElementById("f-role").value;
+          const status = document.getElementById("f-status").value;
+          const flagOnly = document.getElementById("f-flag").checked;
+          const all = window.AdminData.getUsers().filter(u =>
+            (!q || u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)) &&
+            (!role || u.role === role) &&
+            (!status || u.status === status) &&
+            (!flagOnly || u.flagged)
+          );
+          document.getElementById("count").textContent = all.length + " users";
+          document.getElementById("rows").innerHTML = all.map(u => `
+            <tr>
+              <td>
+                <div class="flex items-center gap-3">
+                  <img src="https://i.pravatar.cc/40?u=${u.id}" style="width:2.25rem;height:2.25rem;border-radius:50%;" alt=""/>
+                  <div>
+                    <strong style="font-size:0.875rem;">${u.name} ${u.flagged ? '<i data-lucide="flag" class="i-3" style="color:#dc2626;"></i>' : ''}</strong>
+                    <div class="text-xs text-muted-foreground">${u.email}</div>
+                  </div>
+                </div>
+              </td>
+              <td>${u.role}</td>
+              <td>${statusBadge(u.status)}</td>
+              <td>${u.rating > 0 ? '★ ' + u.rating.toFixed(1) : '—'}</td>
+              <td>${kycBadge(u.kyc)}</td>
+              <td>${u.joined}</td>
+              <td style="text-align:right;">
+                <button class="btn btn-outline btn-sm" data-suspend="${u.id}">${u.status === 'Suspended' ? 'Reinstate' : 'Suspend'}</button>
+              </td>
+            </tr>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        render();
+        ["q", "f-role", "f-status", "f-flag"].forEach(id => document.getElementById(id).addEventListener("input", render));
+        document.getElementById("rows").addEventListener("click", (e) => {
+          const t = e.target.closest("[data-suspend]");
+          if (t) { window.AdminData.suspendUser(t.dataset.suspend); window.showToast("User updated", "Status changed and audit log updated."); render(); }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookings — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Bookings</h1>
+                <p>Requests, confirmed bookings, and the waitlist queue.</p>
+              </div>
+              <a href="provider-dashboard.html" class="btn btn-outline btn-sm"><i data-lucide="arrow-left" class="i-4"></i> Back to dashboard</a>
+            </div>
+
+            <div class="tabs-list" style="grid-template-columns: repeat(3, 1fr);">
+              <button class="tab active" data-tab="requests">Requests</button>
+              <button class="tab" data-tab="confirmed">Confirmed</button>
+              <button class="tab" data-tab="waitlist">Waitlist · Function #25</button>
+            </div>
+
+            <div class="tab-content active" id="tab-requests">
+              <div class="grid grid-2" id="req-grid" style="gap:1rem;"></div>
+            </div>
+
+            <div class="tab-content" id="tab-confirmed">
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Confirmed Bookings — Calendar View</h3></div>
+                <div class="card-content">
+                  <div id="calendar"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-content" id="tab-waitlist">
+              <div class="card card-soft">
+                <div class="card-header">
+                  <h3 class="text-lg font-semibold">Waitlist Queue</h3>
+                  <p class="card-description">Overlapping requests for Saturday Apr 27, 10:00 AM walk slot.</p>
+                </div>
+                <div class="card-content space-y-3" id="waitlist-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "provider-bookings" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/provider-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Tabs
+        document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+          document.querySelectorAll(".tab-content").forEach(x => x.classList.remove("active"));
+          t.classList.add("active");
+          document.getElementById("tab-" + t.dataset.tab).classList.add("active");
+          if (window.renderIcons) window.renderIcons();
+        }));
+
+        // Requests
+        const reqs = window.ProviderData.getPendingRequests();
+        document.getElementById("req-grid").innerHTML = reqs.map(r => `
+          <div class="request-card">
+            <div class="flex items-center justify-between gap-2">
+              <strong>${r.petName} — ${r.ownerName}</strong>
+              <span class="text-xs text-muted-foreground">${r.sentAt}</span>
+            </div>
+            <div class="request-meta">
+              <span><i data-lucide="briefcase" class="i-3"></i> ${r.service}</span>
+              <span><i data-lucide="calendar" class="i-3"></i> ${r.date}</span>
+              <span><i data-lucide="dollar-sign" class="i-3"></i> $${r.price}</span>
+            </div>
+            <p class="text-sm text-muted-foreground">${r.notes}</p>
+            <div class="request-card-actions">
+              <button class="btn btn-primary btn-sm">Accept</button>
+              <button class="btn btn-outline btn-sm">Counter-offer</button>
+              <button class="btn btn-ghost btn-sm">Decline</button>
+            </div>
+          </div>
+        `).join("");
+
+        // Calendar (simple weekly grid)
+        const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        const events = [
+          { day: 0, time: "08:00", title: "Mochi · Walk", color: "#22c55e" },
+          { day: 0, time: "13:30", title: "Pickle · Sit", color: "#3b82f6" },
+          { day: 1, time: "10:00", title: "Bella · Group Walk", color: "#22c55e" },
+          { day: 2, time: "09:00", title: "Max · Drop-in", color: "#a855f7" },
+          { day: 3, time: "11:00", title: "Charlie · Walk", color: "#22c55e" },
+          { day: 4, time: "14:00", title: "Rocky · Boarding", color: "#f59e0b" },
+          { day: 5, time: "10:00", title: "Bella · Walk", color: "#22c55e" },
+          { day: 5, time: "10:00", title: "Duke · Walk", color: "#ef4444" },
+        ];
+        document.getElementById("calendar").innerHTML = `
+          <div style="display:grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;">
+            ${days.map((d, i) => `
+              <div>
+                <div style="font-weight:600; font-size:0.75rem; color: var(--muted-foreground); text-align:center; padding-bottom:0.5rem; border-bottom: 1px solid var(--border); margin-bottom:0.5rem;">${d} <span style="color:var(--foreground);">${24 + i}</span></div>
+                <div style="min-height: 12rem; display:flex; flex-direction:column; gap:0.375rem;">
+                  ${events.filter(e => e.day === i).map(e => `
+                    <div style="background:${e.color}22;border-left:3px solid ${e.color};padding:0.4rem 0.5rem;border-radius:0.375rem;font-size:0.75rem;">
+                      <strong>${e.time}</strong><br/>${e.title}
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+
+        // Waitlist
+        const waitlist = [
+          { rank: 1, petName: "Bella", ownerName: "Mark J.", note: "Existing client · 12 prior bookings" },
+          { rank: 2, petName: "Duke", ownerName: "Tom B.", note: "New client · vaccinations verified" },
+          { rank: 3, petName: "Honey", ownerName: "Priya K.", note: "Existing client · prefers small groups" },
+        ];
+        document.getElementById("waitlist-list").innerHTML = waitlist.map(w => `
+          <div class="request-card" style="display:grid; grid-template-columns: 2.5rem 1fr auto; align-items:center;">
+            <div class="quick-action-icon bg-primary-tint" style="width:2.5rem;height:2.5rem;border-radius:50%;font-weight:700;color:var(--primary);">${w.rank}</div>
+            <div>
+              <strong>${w.petName} — ${w.ownerName}</strong>
+              <p class="text-sm text-muted-foreground">${w.note}</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-primary btn-sm">Promote</button>
+              <button class="btn btn-outline btn-sm">Notify</button>
+            </div>
+          </div>
+        `).join("");
+
+        if (window.renderIcons) window.renderIcons();
+      });
+    </script>
+  </body>
+</html>

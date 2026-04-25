@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Behavioral Briefing — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Behavioral Briefings</h1>
+                <p>Read and acknowledge handling notes before each session — Function #27.</p>
+              </div>
+              <span class="badge badge-amber" id="pending-count">0 pending</span>
+            </div>
+
+            <div class="grid grid-2" style="gap:1.5rem;" id="briefings-grid"></div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "provider-briefing" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/provider-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const render = () => {
+          const briefs = window.ProviderData.getBriefings();
+          const pending = briefs.filter(b => !b.acknowledged).length;
+          document.getElementById("pending-count").textContent = pending + " pending";
+          document.getElementById("briefings-grid").innerHTML = briefs.map(b => `
+            <div class="card card-soft">
+              <div class="card-header flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold">${b.petName} <span class="text-sm text-muted-foreground" style="font-weight:500;">— ${b.ownerName}</span></h3>
+                  <p class="card-description">Behavioral & care brief</p>
+                </div>
+                <span class="badge ${b.acknowledged ? 'badge-green' : 'badge-amber'}">
+                  ${b.acknowledged ? '<i data-lucide="check-circle-2" class="i-3"></i> Acknowledged' : '<i data-lucide="clock" class="i-3"></i> Pending'}
+                </span>
+              </div>
+              <div class="card-content space-y-4">
+                <div>
+                  <label class="label" style="display:flex;align-items:center;gap:0.375rem;"><i data-lucide="heart-handshake" class="i-4"></i> Handling notes</label>
+                  <p class="text-sm">${b.handling}</p>
+                </div>
+                <div class="drug-warning" style="padding: 0.75rem 1rem;">
+                  <i data-lucide="alert-triangle" class="i-5"></i>
+                  <div>
+                    <h4 style="font-size: 0.8125rem;">Warnings</h4>
+                    <ul style="margin: 0.25rem 0 0; padding-left: 1.25rem;">
+                      ${b.warnings.map(w => `<li class="text-xs">${w}</li>`).join("")}
+                    </ul>
+                  </div>
+                </div>
+                <div class="grid grid-2" style="gap:1rem;">
+                  <div>
+                    <label class="label" style="display:flex;align-items:center;gap:0.375rem;"><i data-lucide="phone" class="i-4"></i> Emergency contacts</label>
+                    <p class="text-sm">${b.emergency}</p>
+                  </div>
+                  <div>
+                    <label class="label" style="display:flex;align-items:center;gap:0.375rem;"><i data-lucide="leaf" class="i-4"></i> Allergies</label>
+                    <p class="text-sm">${b.allergies}</p>
+                  </div>
+                </div>
+                ${!b.acknowledged ? `
+                  <button class="btn btn-primary w-full" data-ack="${b.petName}">
+                    <i data-lucide="check" class="i-4"></i> Acknowledge — I have read this brief
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        render();
+        document.getElementById("briefings-grid").addEventListener("click", (e) => {
+          const t = e.target.closest("[data-ack]");
+          if (t) { window.ProviderData.acknowledgeBriefing(t.dataset.ack); window.showToast("Acknowledged", "Owner has been notified."); render(); }
+        });
+      });
+    </script>
+  </body>
+</html>

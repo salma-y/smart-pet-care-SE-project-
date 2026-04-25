@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Audit Log — PetWell Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Data Privacy Audit Log</h1>
+                <p>Function #36 — every record access is recorded and visible to the affected user.</p>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn btn-outline btn-sm"><i data-lucide="file-text" class="i-4"></i> Export CSV</button>
+                <button class="btn btn-primary btn-sm"><i data-lucide="shield" class="i-4"></i> Privacy report</button>
+              </div>
+            </div>
+
+            <div class="filters-bar">
+              <div class="search-input">
+                <i data-lucide="search"></i>
+                <input class="input" id="q" placeholder="Search by record, user, or action..." />
+              </div>
+              <select class="select" id="f-action" style="max-width:12rem;">
+                <option value="">All actions</option>
+                <option>Viewed</option>
+                <option>Created</option>
+                <option>Updated</option>
+                <option>Modified</option>
+                <option>Exported</option>
+                <option>Suspended</option>
+              </select>
+              <select class="select" id="f-role" style="max-width:14rem;">
+                <option value="">All roles</option>
+                <option>Pet Owner</option>
+                <option>Veterinarian</option>
+                <option>Service Provider</option>
+                <option>Admin</option>
+              </select>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-content" style="padding:0;">
+                <div id="rows"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-audit" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const render = () => {
+          const q = document.getElementById("q").value.toLowerCase();
+          const action = document.getElementById("f-action").value;
+          const role = document.getElementById("f-role").value;
+          const all = window.AdminData.getAuditLog().filter(l =>
+            (!q || l.record.toLowerCase().includes(q) || l.accessedBy.toLowerCase().includes(q) || l.action.toLowerCase().includes(q)) &&
+            (!action || l.action === action) &&
+            (!role || l.role === role)
+          );
+          document.getElementById("rows").innerHTML = all.length === 0
+            ? `<div class="empty-state"><div class="empty-state-icon"><i data-lucide="file-search" class="i-5"></i></div><p>No records match your filter.</p></div>`
+            : all.map(l => `
+              <div class="audit-row">
+                <span class="audit-action ${l.action.toLowerCase()}">${l.action}</span>
+                <div>
+                  <strong style="font-size:0.875rem;">${l.record}</strong>
+                  <div class="text-xs text-muted-foreground" style="margin-top:0.125rem;">${l.accessedBy} · ${l.role}</div>
+                </div>
+                <span class="text-xs text-muted-foreground" style="font-variant-numeric: tabular-nums;">${l.time}</span>
+              </div>
+            `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        render();
+        ["q", "f-action", "f-role"].forEach(id => document.getElementById(id).addEventListener("input", render));
+      });
+    </script>
+  </body>
+</html>

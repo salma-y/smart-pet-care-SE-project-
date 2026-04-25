@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Incident Report — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 64rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Incident Report</h1>
+                <p>File a structured report — Function #28. Owner, vet, and admin will be notified per severity.</p>
+              </div>
+            </div>
+
+            <div class="drug-warning">
+              <i data-lucide="alert-triangle" class="i-5"></i>
+              <div>
+                <h4>For medical emergencies, call the owner first.</h4>
+                <p>Then file this report. High-severity reports auto-escalate to the owner via SMS within 60 seconds.</p>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Step 1 — Pet & Time</h3></div>
+              <div class="card-content space-y-4">
+                <div class="grid grid-2" style="gap:1rem;">
+                  <div><label class="label">Pet</label>
+                    <select class="select" id="f-pet"><option>Mochi (Jane Doe)</option><option>Bella (Mark J.)</option><option>Charlie (Emily R.)</option><option>Rocky (Carlos D.)</option></select>
+                  </div>
+                  <div><label class="label">When did it happen?</label>
+                    <input type="datetime-local" class="input" id="f-time" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Step 2 — Type & Severity</h3></div>
+              <div class="card-content space-y-4">
+                <div>
+                  <label class="label">Incident type</label>
+                  <div class="grid grid-4" style="gap:0.5rem;">
+                    <div class="radio-card selected" data-type="injury">Minor injury</div>
+                    <div class="radio-card" data-type="medical">Medical issue</div>
+                    <div class="radio-card" data-type="behavior">Behavioral</div>
+                    <div class="radio-card" data-type="property">Property damage</div>
+                  </div>
+                </div>
+                <div>
+                  <label class="label">Severity</label>
+                  <div class="grid grid-4" style="gap:0.5rem;">
+                    <div class="radio-card selected" data-sev="low">Low</div>
+                    <div class="radio-card" data-sev="medium">Medium</div>
+                    <div class="radio-card" data-sev="high">High</div>
+                    <div class="radio-card" data-sev="critical">Critical · 911</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Step 3 — Description & Evidence</h3></div>
+              <div class="card-content space-y-4">
+                <div><label class="label">What happened?</label>
+                  <textarea class="textarea" rows="4" placeholder="Describe in plain language. Include actions taken."></textarea>
+                </div>
+                <div><label class="label">Photos</label>
+                  <div class="dropzone">
+                    <div class="dropzone-icon"><i data-lucide="camera" class="i-5"></i></div>
+                    <p style="font-weight: 500; margin-bottom: 0.25rem;">Drop photos or click to upload</p>
+                    <p class="text-xs text-muted-foreground">Up to 5 images, 10MB each</p>
+                  </div>
+                </div>
+                <div><label class="label">Witness contact (optional)</label>
+                  <input type="text" class="input" placeholder="Name and phone if applicable"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Step 4 — Notifications</h3></div>
+              <div class="card-content space-y-3">
+                <label class="checkbox-row"><input type="checkbox" checked/> Notify owner immediately</label>
+                <label class="checkbox-row"><input type="checkbox" checked/> Notify pet's primary veterinarian</label>
+                <label class="checkbox-row"><input type="checkbox"/> Open dispute case (if injury / damage)</label>
+                <label class="checkbox-row"><input type="checkbox" checked/> Generate insurance claim PDF</label>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+              <a href="provider-dashboard.html" class="btn btn-ghost">Cancel</a>
+              <button class="btn btn-primary" id="submit"><i data-lucide="send" class="i-4"></i> Submit Report</button>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Recent Reports</h3></div>
+              <div class="card-content">
+                <table class="table-clean">
+                  <thead><tr><th>Date</th><th>Pet</th><th>Type</th><th>Severity</th><th>Case #</th><th></th></tr></thead>
+                  <tbody id="incident-rows"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "provider-incident" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/provider-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("[data-type]").forEach(c => c.addEventListener("click", () => {
+          document.querySelectorAll("[data-type]").forEach(x => x.classList.remove("selected"));
+          c.classList.add("selected");
+        }));
+        document.querySelectorAll("[data-sev]").forEach(c => c.addEventListener("click", () => {
+          document.querySelectorAll("[data-sev]").forEach(x => x.classList.remove("selected"));
+          c.classList.add("selected");
+        }));
+        document.getElementById("submit").addEventListener("click", () => {
+          const caseNum = "PW-INC-" + String(Math.floor(Math.random() * 99000) + 1000);
+          window.ProviderData.addIncident({ id: "inc" + Date.now(), date: new Date().toISOString().slice(0, 10), pet: "Mochi", type: "Minor Injury", severity: "Low", description: "—", caseNumber: caseNum });
+          window.showToast("Report filed", "Case " + caseNum + " — owner & vet notified.");
+          renderIncidents();
+        });
+
+        const renderIncidents = () => {
+          const list = window.ProviderData.getIncidents();
+          document.getElementById("incident-rows").innerHTML = list.map(i => `
+            <tr>
+              <td>${i.date}</td>
+              <td>${i.pet}</td>
+              <td>${i.type}</td>
+              <td><span class="sev-pill ${i.severity.toLowerCase()}">${i.severity}</span></td>
+              <td><span class="text-xs" style="font-family: ui-monospace, monospace;">${i.caseNumber}</span></td>
+              <td><button class="btn btn-ghost btn-sm"><i data-lucide="eye" class="i-4"></i></button></td>
+            </tr>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        renderIncidents();
+      });
+    </script>
+  </body>
+</html>

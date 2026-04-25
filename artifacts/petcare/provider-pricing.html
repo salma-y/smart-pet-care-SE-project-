@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Tiered Pricing Setup</h1>
+                <p>Configure your base rates, durations, holiday markups, and multi-pet discounts — Function #23.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="save"><i data-lucide="save" class="i-4"></i> Save Pricing</button>
+            </div>
+
+            <div class="grid grid-2" style="gap:1.5rem;">
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Base Rates per Service</h3></div>
+                <div class="card-content space-y-4">
+                  <div><label class="label">Walking (60 min)</label><input type="number" class="input" id="r-walk" /></div>
+                  <div><label class="label">Sitting (60 min)</label><input type="number" class="input" id="r-sit" /></div>
+                  <div><label class="label">Boarding (per night)</label><input type="number" class="input" id="r-board" /></div>
+                  <div><label class="label">Drop-in Visit (30 min)</label><input type="number" class="input" id="r-drop" /></div>
+                </div>
+              </div>
+
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Multipliers & Surcharges</h3></div>
+                <div class="card-content space-y-4">
+                  <div>
+                    <label class="label">Duration multiplier (default 60 min)</label>
+                    <div class="grid grid-4" style="gap:0.5rem;">
+                      <div class="radio-card" data-dur="30">30 min<br/><strong>×0.75</strong></div>
+                      <div class="radio-card selected" data-dur="60">60 min<br/><strong>×1.0</strong></div>
+                      <div class="radio-card" data-dur="90">90 min<br/><strong>×1.4</strong></div>
+                      <div class="radio-card" data-dur="120">120 min<br/><strong>×1.75</strong></div>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="checkbox-row">
+                      <input type="checkbox" id="holiday" />
+                      Holiday rate active <span class="text-muted-foreground">(+25% on May 25, Jul 4, Dec 25)</span>
+                    </label>
+                  </div>
+                  <div>
+                    <label class="label">Multi-pet discount</label>
+                    <div class="flex items-center gap-3">
+                      <input type="range" class="slider" min="0" max="25" value="10" id="mp-discount" />
+                      <strong id="mp-discount-val">10%</strong>
+                    </div>
+                    <p class="text-xs text-muted-foreground" style="margin-top:0.5rem;">Each additional pet beyond the first reduces price by this percentage.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header">
+                <h3 class="text-lg font-semibold">Live Price Preview</h3>
+                <p class="card-description">Customers see this exact breakdown before confirming.</p>
+              </div>
+              <div class="card-content">
+                <div class="grid grid-2" style="gap:1.5rem;">
+                  <div class="space-y-3">
+                    <label class="label">Service</label>
+                    <select class="select" id="p-service">
+                      <option value="walking">Walking</option>
+                      <option value="sitting">Sitting</option>
+                      <option value="boarding">Boarding</option>
+                      <option value="dropIn">Drop-in</option>
+                    </select>
+                    <label class="label">Pets</label>
+                    <input type="number" class="input" id="p-pets" value="2" min="1" max="5"/>
+                    <label class="label">Holiday booking?</label>
+                    <label class="checkbox-row"><input type="checkbox" id="p-holiday"/> Yes, treat as holiday</label>
+                  </div>
+                  <div class="price-preview" id="preview"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "provider-pricing" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/provider-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const p = window.ProviderData.getPricing();
+        document.getElementById("r-walk").value = p.base.walking;
+        document.getElementById("r-sit").value = p.base.sitting;
+        document.getElementById("r-board").value = p.base.boarding;
+        document.getElementById("r-drop").value = p.base.dropIn;
+
+        let selectedDur = "60";
+        document.querySelectorAll("[data-dur]").forEach(el => el.addEventListener("click", () => {
+          document.querySelectorAll("[data-dur]").forEach(x => x.classList.remove("selected"));
+          el.classList.add("selected");
+          selectedDur = el.dataset.dur;
+          updatePreview();
+        }));
+        document.getElementById("mp-discount").addEventListener("input", (e) => {
+          document.getElementById("mp-discount-val").textContent = e.target.value + "%";
+          updatePreview();
+        });
+        document.getElementById("p-service").addEventListener("change", updatePreview);
+        document.getElementById("p-pets").addEventListener("input", updatePreview);
+        document.getElementById("p-holiday").addEventListener("change", updatePreview);
+        document.getElementById("holiday").addEventListener("change", updatePreview);
+        document.getElementById("save").addEventListener("click", () => window.showToast("Pricing saved", "Updates apply to new bookings."));
+
+        function updatePreview() {
+          const svc = document.getElementById("p-service").value;
+          const base = parseFloat(document.getElementById("r-" + (svc === "walking" ? "walk" : svc === "sitting" ? "sit" : svc === "boarding" ? "board" : "drop")).value || 0);
+          const mult = p.durationMultiplier[selectedDur];
+          const pets = Math.max(1, parseInt(document.getElementById("p-pets").value || 1));
+          const discount = parseFloat(document.getElementById("mp-discount").value);
+          const holiday = document.getElementById("p-holiday").checked;
+          const subtotal = base * mult;
+          const petAdj = pets > 1 ? (subtotal * (pets - 1) * (1 - discount / 100)) : 0;
+          let total = subtotal + petAdj;
+          const holidayAdd = holiday ? total * 0.25 : 0;
+          total += holidayAdd;
+          document.getElementById("preview").innerHTML = `
+            <div class="price-row"><span>Base ${svc} (${selectedDur} min)</span><span>$${subtotal.toFixed(2)}</span></div>
+            <div class="price-row"><span>+${pets - 1} additional pet${pets > 2 ? 's' : ''} (${discount}% off each)</span><span>$${petAdj.toFixed(2)}</span></div>
+            ${holiday ? `<div class="price-row"><span>Holiday markup (+25%)</span><span>$${holidayAdd.toFixed(2)}</span></div>` : ''}
+            <div class="price-row total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+          `;
+        }
+        updatePreview();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certifications — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 64rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Certifications & Training</h1>
+                <p>Function #26 — verified certifications appear on your provider profile.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="upload"><i data-lucide="upload" class="i-4"></i> Upload Certificate</button>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Verification State Machine</h3></div>
+              <div class="card-content">
+                <div class="state-machine">
+                  <span class="state-step complete"><i data-lucide="upload-cloud" class="i-4"></i> Submitted</span>
+                  <i data-lucide="chevron-right" class="i-4 state-arrow"></i>
+                  <span class="state-step complete"><i data-lucide="search" class="i-4"></i> Under Review</span>
+                  <i data-lucide="chevron-right" class="i-4 state-arrow"></i>
+                  <span class="state-step active"><i data-lucide="badge-check" class="i-4"></i> Verified</span>
+                  <i data-lucide="chevron-right" class="i-4 state-arrow"></i>
+                  <span class="state-step"><i data-lucide="alert-circle" class="i-4"></i> Expired</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-3" id="cert-list"></div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Recommended Training</h3></div>
+              <div class="card-content space-y-3">
+                <div class="cert-card">
+                  <div class="cert-icon"><i data-lucide="graduation-cap" class="i-5"></i></div>
+                  <div>
+                    <strong>Reactive Dog Handling</strong>
+                    <p class="text-sm text-muted-foreground">4-hour online course · Increases your trust badge tier.</p>
+                  </div>
+                  <a href="coming-soon.html" class="btn btn-outline btn-sm">Enroll <i data-lucide="external-link" class="i-3"></i></a>
+                </div>
+                <div class="cert-card">
+                  <div class="cert-icon"><i data-lucide="graduation-cap" class="i-5"></i></div>
+                  <div>
+                    <strong>Senior Pet Care Specialist</strong>
+                    <p class="text-sm text-muted-foreground">6-hour course covering arthritis, dementia, and end-of-life care.</p>
+                  </div>
+                  <a href="coming-soon.html" class="btn btn-outline btn-sm">Enroll <i data-lucide="external-link" class="i-3"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "provider-certifications" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/provider-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const stateBadge = (s) => {
+          if (s === "verified") return '<span class="badge badge-green"><i data-lucide="badge-check" class="i-3"></i> Verified</span>';
+          if (s === "review") return '<span class="badge badge-amber"><i data-lucide="search" class="i-3"></i> Under Review</span>';
+          if (s === "submitted") return '<span class="badge badge-secondary"><i data-lucide="upload-cloud" class="i-3"></i> Submitted</span>';
+          if (s === "expired") return '<span class="badge badge-red"><i data-lucide="alert-circle" class="i-3"></i> Expired</span>';
+          return '';
+        };
+        const render = () => {
+          const certs = window.ProviderData.getCertifications();
+          document.getElementById("cert-list").innerHTML = certs.map(c => `
+            <div class="cert-card">
+              <div class="cert-icon"><i data-lucide="award" class="i-5"></i></div>
+              <div>
+                <strong>${c.type}</strong>
+                <p class="text-sm text-muted-foreground">Issued by ${c.issuer} · Expires ${c.expiry}</p>
+              </div>
+              <div class="flex flex-col items-end gap-1">
+                ${stateBadge(c.state)}
+                <button class="btn btn-ghost btn-sm"><i data-lucide="paperclip" class="i-3"></i> View document</button>
+              </div>
+            </div>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        render();
+
+        document.getElementById("upload").addEventListener("click", () => {
+          window.ProviderData.addCertification({ id: "c" + Date.now(), type: "New Certificate", issuer: "Pending", expiry: "—", state: "submitted" });
+          window.showToast("Uploaded", "Verification typically takes 2–4 business days.");
+          render();
+        });
+      });
+    </script>
+  </body>
+</html>

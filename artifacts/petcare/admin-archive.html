@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archive Manager — PetWell Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>Database Archive Manager</h1>
+                <p>Function #37 — auto-archive deceased / inactive pets after 12 months while preserving records.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-2" style="gap:1.5rem;">
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Archive Candidates</h3><p class="card-description">Inactive 12+ months — auto-archive eligible.</p></div>
+                <div class="card-content space-y-2" id="candidates"></div>
+              </div>
+
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Archive Activity Log</h3></div>
+                <div class="card-content">
+                  <div class="audit-trail" id="log"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Archived Records</h3></div>
+              <div class="card-content" style="padding:0;">
+                <table class="table-clean">
+                  <thead><tr><th>Pet</th><th>Owner</th><th>Reason</th><th>Records</th><th>Since</th><th></th></tr></thead>
+                  <tbody id="archived"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Auto-Archive Policy</h3></div>
+              <div class="card-content space-y-3">
+                <label class="checkbox-row"><input type="checkbox" checked/> Auto-archive pets with no activity in 12 months</label>
+                <label class="checkbox-row"><input type="checkbox" checked/> Notify owner 30 days before auto-archive</label>
+                <label class="checkbox-row"><input type="checkbox" checked/> Preserve medical history indefinitely</label>
+                <label class="checkbox-row"><input type="checkbox"/> Allow owner self-restore for 90 days post-archive</label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "admin-archive" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/admin-data.js"></script>
+    <script src="/js/notif-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const render = () => {
+          const cands = window.AdminData.getActiveArchiveCandidates();
+          document.getElementById("candidates").innerHTML = cands.length === 0
+            ? `<div class="empty-state"><div class="empty-state-icon"><i data-lucide="check" class="i-5"></i></div><p>No candidates right now.</p></div>`
+            : cands.map(c => `
+              <div class="cert-card">
+                <div class="cert-icon"><i data-lucide="paw-print" class="i-5"></i></div>
+                <div>
+                  <strong>${c.name} <span class="text-muted-foreground" style="font-weight:500;">— ${c.species}</span></strong>
+                  <p class="text-xs text-muted-foreground">${c.owner} · last seen ${c.lastSeen} · ${c.recordsCount} records</p>
+                </div>
+                <button class="btn btn-outline btn-sm" data-archive="${c.id}"><i data-lucide="archive" class="i-3"></i> Archive</button>
+              </div>
+            `).join("");
+
+          document.getElementById("log").innerHTML = window.AdminData.getArchiveLog().map(l => `
+            <div class="audit-item">
+              <strong style="font-size:0.875rem;">${l.action}</strong>
+              <p class="text-xs text-muted-foreground">${l.actor} · ${l.time}</p>
+            </div>
+          `).join("");
+
+          document.getElementById("archived").innerHTML = window.AdminData.getArchivedPets().map(p => `
+            <tr>
+              <td><strong>${p.name}</strong> <span class="text-xs text-muted-foreground">${p.species} · ${p.breed}</span></td>
+              <td>${p.owner}</td>
+              <td>${p.reason}</td>
+              <td>${p.recordsCount}</td>
+              <td>${p.since}</td>
+              <td style="text-align:right;"><button class="btn btn-ghost btn-sm" data-restore="${p.id}"><i data-lucide="undo-2" class="i-3"></i> Restore</button></td>
+            </tr>
+          `).join("");
+          if (window.renderIcons) window.renderIcons();
+        };
+        render();
+        document.getElementById("candidates").addEventListener("click", (e) => {
+          const t = e.target.closest("[data-archive]");
+          if (t) { window.AdminData.archivePet(t.dataset.archive); window.showToast("Archived", "Records preserved indefinitely."); render(); }
+        });
+        document.getElementById("archived").addEventListener("click", (e) => {
+          const t = e.target.closest("[data-restore]");
+          if (t) { window.AdminData.restorePet(t.dataset.restore); window.showToast("Restored", "Owner has been notified."); render(); }
+        });
+      });
+    </script>
+  </body>
+</html>

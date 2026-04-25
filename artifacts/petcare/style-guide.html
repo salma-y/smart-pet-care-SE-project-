@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Style Guide — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+            <div class="page-header">
+              <div>
+                <h1>PetWell Style Guide</h1>
+                <p>Function #45 — design tokens, components, and empty/loading states for the entire system.</p>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">1 · Color Tokens</h3></div>
+              <div class="card-content">
+                <div class="sg-grid">
+                  <div class="sg-swatch"><div class="sg-color-block" style="background:hsl(160 47% 45%);"></div><strong>Primary</strong><div class="sg-mono">--primary · #3a9982</div></div>
+                  <div class="sg-swatch"><div class="sg-color-block" style="background:hsl(40 40% 92%);"></div><strong>Secondary</strong><div class="sg-mono">--secondary</div></div>
+                  <div class="sg-swatch"><div class="sg-color-block" style="background:hsl(0 70% 60%);"></div><strong>Destructive</strong><div class="sg-mono">--destructive</div></div>
+                  <div class="sg-swatch"><div class="sg-color-block" style="background:#22c55e;"></div><strong>Success</strong><div class="sg-mono">#22c55e</div></div>
+                  <div class="sg-swatch"><div class="sg-color-block" style="background:#f59e0b;"></div><strong>Warning</strong><div class="sg-mono">#f59e0b</div></div>
+                  <div class="sg-swatch"><div class="sg-color-block" style="background:#3b82f6;"></div><strong>Info</strong><div class="sg-mono">#3b82f6</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">2 · Typography</h3></div>
+              <div class="card-content space-y-2">
+                <h1>Heading 1 · Inter 700</h1>
+                <h2>Heading 2 · Inter 600</h2>
+                <h3>Heading 3 · Inter 600</h3>
+                <p style="font-size:1rem;">Body — Inter 400 — used for paragraphs, descriptions, and most copy.</p>
+                <p class="text-sm text-muted-foreground">Small muted — Inter 400 — used for metadata.</p>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">3 · Buttons</h3></div>
+              <div class="card-content flex flex-wrap gap-2">
+                <button class="btn btn-primary">Primary</button>
+                <button class="btn btn-outline">Outline</button>
+                <button class="btn btn-ghost">Ghost</button>
+                <button class="btn btn-destructive">Destructive</button>
+                <button class="btn btn-primary btn-sm">Small</button>
+                <button class="btn btn-primary"><i data-lucide="plus" class="i-4"></i> With icon</button>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">4 · Badges & Pills</h3></div>
+              <div class="card-content flex flex-wrap gap-2">
+                <span class="badge badge-primary">Primary</span>
+                <span class="badge badge-secondary">Secondary</span>
+                <span class="badge badge-green">Success</span>
+                <span class="badge badge-amber">Pending</span>
+                <span class="badge badge-red">Critical</span>
+                <span class="badge badge-outline">Outline</span>
+                <span class="sev-pill high">High</span>
+                <span class="sev-pill medium">Medium</span>
+                <span class="sev-pill low">Low</span>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">5 · Form Inputs</h3></div>
+              <div class="card-content grid grid-2" style="gap:1rem;">
+                <div><label class="label">Text input</label><input class="input" placeholder="Type here..."/></div>
+                <div><label class="label">Select</label><select class="select"><option>Option A</option><option>Option B</option></select></div>
+                <div><label class="label">Textarea</label><textarea class="textarea" rows="2" placeholder="Multi-line..."></textarea></div>
+                <div>
+                  <label class="label">Toggle</label><br/>
+                  <label class="switch"><input type="checkbox" checked/><span class="slider-toggle"></span></label>
+                </div>
+                <div>
+                  <label class="label">Chips</label>
+                  <div class="chip-group"><button class="chip active">All</button><button class="chip">Active</button><button class="chip">Past</button></div>
+                </div>
+                <div>
+                  <label class="label">Radio cards</label>
+                  <div class="grid grid-3" style="gap:0.5rem;">
+                    <div class="radio-card selected">A</div><div class="radio-card">B</div><div class="radio-card">C</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">6 · Cards & Stats</h3></div>
+              <div class="card-content grid grid-3" style="gap:1rem;">
+                <div class="stat-card">
+                  <div class="stat-icon" style="background:#dcfce7;color:#15803d;"><i data-lucide="paw-print" class="i-5"></i></div>
+                  <div class="stat-value">12</div>
+                  <div class="stat-label">Pets</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon" style="background:#dbeafe;color:#2563eb;"><i data-lucide="syringe" class="i-5"></i></div>
+                  <div class="stat-value">98%</div>
+                  <div class="stat-label">Vaccinated</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon" style="background:#fef9c3;color:#a16207;"><i data-lucide="calendar" class="i-5"></i></div>
+                  <div class="stat-value">3</div>
+                  <div class="stat-label">Upcoming</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">7 · Loading & Empty States</h3></div>
+              <div class="card-content grid grid-2" style="gap:1.5rem;">
+                <div>
+                  <strong style="display:block; margin-bottom:0.5rem;">Skeleton loader</strong>
+                  <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+                    <div class="skeleton circle"></div>
+                    <div style="flex:1;">
+                      <div class="skeleton line med"></div>
+                      <div class="skeleton line short"></div>
+                    </div>
+                  </div>
+                  <div class="skeleton box"></div>
+                  <div class="skeleton line long"></div>
+                  <div class="skeleton line med"></div>
+                </div>
+                <div>
+                  <strong style="display:block; margin-bottom:0.5rem;">Empty state</strong>
+                  <div class="empty-state">
+                    <div class="empty-state-icon"><i data-lucide="inbox" class="i-5"></i></div>
+                    <p>You're all caught up!</p>
+                    <p class="text-sm text-muted-foreground">No pending items in this view.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">8 · Notifications & Toasts</h3></div>
+              <div class="card-content space-y-3">
+                <div class="alert-row"><span class="alert-dot high"></span><div><strong>High priority alert</strong><p class="text-sm text-muted-foreground">Requires immediate action.</p></div></div>
+                <div class="alert-row"><span class="alert-dot medium"></span><div><strong>Medium alert</strong><p class="text-sm text-muted-foreground">Worth checking today.</p></div></div>
+                <div class="alert-row"><span class="alert-dot low"></span><div><strong>Informational</strong><p class="text-sm text-muted-foreground">No action required.</p></div></div>
+                <button class="btn btn-primary btn-sm" id="toast-demo"><i data-lucide="bell" class="i-4"></i> Trigger toast</button>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">9 · Iconography</h3></div>
+              <div class="card-content">
+                <div class="sg-grid">
+                  ${["paw-print","stethoscope","syringe","heart","map-pin","calendar","shield-check","store","bell","scale","award","badge-check"].map(i => `
+                    <div class="sg-swatch" style="text-align:center;">
+                      <i data-lucide="${i}" class="i-5" style="margin: 0 auto 0.5rem; display:block; color:var(--primary);"></i>
+                      <div class="sg-mono">${i}</div>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "style-guide" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("toast-demo").addEventListener("click", () => window.showToast("Saved!", "Your changes have been recorded."));
+      });
+    </script>
+  </body>
+</html>

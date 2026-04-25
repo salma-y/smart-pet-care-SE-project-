@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page not found — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto" style="max-width: 56rem; width: 100%;">
+
+            <div class="error-page">
+              <div class="error-illustration">
+                <svg viewBox="0 0 240 240" style="width: 11rem; height: 11rem; position: relative; z-index: 1;">
+                  <!-- Sleepy paw illustration -->
+                  <ellipse cx="120" cy="160" rx="60" ry="40" fill="hsl(160 47% 45%)" opacity="0.92"/>
+                  <circle cx="80" cy="100" r="22" fill="hsl(160 47% 45%)" opacity="0.92"/>
+                  <circle cx="115" cy="80" r="22" fill="hsl(160 47% 45%)" opacity="0.92"/>
+                  <circle cx="155" cy="80" r="22" fill="hsl(160 47% 45%)" opacity="0.92"/>
+                  <circle cx="185" cy="105" r="22" fill="hsl(160 47% 45%)" opacity="0.92"/>
+                  <text x="120" y="170" text-anchor="middle" font-size="40" font-weight="700" fill="#fff">404</text>
+                </svg>
+              </div>
+              <h1 style="font-size:2.5rem;">This page wandered off</h1>
+              <p style="max-width: 32rem; margin: 0 auto;">The page you're looking for might have moved, been archived, or never existed. Let's get you back on the trail.</p>
+              <div class="flex flex-wrap gap-2 justify-center" style="margin-top: 1rem;">
+                <a href="index.html" class="btn btn-primary"><i data-lucide="home" class="i-4"></i> Home</a>
+                <a href="dashboard.html" class="btn btn-outline"><i data-lucide="layout-dashboard" class="i-4"></i> Pet Owner Dashboard</a>
+                <a href="search.html" class="btn btn-outline"><i data-lucide="search" class="i-4"></i> Try Search</a>
+              </div>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-header"><h3 class="text-lg font-semibold">Popular Destinations</h3></div>
+              <div class="card-content">
+                <div class="grid grid-3">
+                  <a href="appointments.html" class="quick-action">
+                    <div class="quick-action-icon bg-primary-tint"><i data-lucide="calendar" class="i-5"></i></div>
+                    <div><h4>Appointments</h4><p>Book or manage visits</p></div>
+                  </a>
+                  <a href="marketplace.html" class="quick-action">
+                    <div class="quick-action-icon bg-amber-tint"><i data-lucide="store" class="i-5"></i></div>
+                    <div><h4>Marketplace</h4><p>Vet-recommended products</p></div>
+                  </a>
+                  <a href="vet-dashboard.html" class="quick-action">
+                    <div class="quick-action-icon" style="background:#dbeafe;color:#2563eb;"><i data-lucide="stethoscope" class="i-5"></i></div>
+                    <div><h4>Vet Console</h4><p>Patient charts & schedule</p></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "404" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+  </body>
+</html>
