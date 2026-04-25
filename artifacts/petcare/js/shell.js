@@ -7,18 +7,28 @@
   const pageInfo = window.PetWellPage || {}; // each page sets this before loading shell.js
   const isAuth = ["login", "register", "forgot-password"].includes(pageInfo.id);
   const isLanding = pageInfo.id === "home";
-  const showSidebar = ["dashboard", "pets", "pet-detail", "symptom-checker", "appointments", "appointments-new", "lost-pets"].includes(pageInfo.id);
+
+  const ownerPages = ["dashboard", "pets", "pet-detail", "symptom-checker", "appointments", "appointments-new", "lost-pets"];
+  const vetPages = ["vet-dashboard", "vet-patients", "vet-consultation", "vet-prescription", "vet-lab-upload", "vet-referral", "vet-surgery", "vet-income"];
+  const marketplacePages = ["marketplace", "marketplace-product", "cart", "subscriptions", "loyalty", "recalls"];
+
+  const isOwner = ownerPages.includes(pageInfo.id);
+  const isVet = vetPages.includes(pageInfo.id);
+  const isMarketplace = marketplacePages.includes(pageInfo.id);
+  const showSidebar = isOwner || isVet || isMarketplace;
 
   // ---------- TopNav ----------
   function renderTopNav() {
     if (isAuth) return "";
     const links = [
-      { name: "Pet Owner", path: "dashboard.html", active: ["dashboard", "pets", "pet-detail"].includes(pageInfo.id) },
-      { name: "Veterinarian", path: "coming-soon.html" },
+      { name: "Pet Owner", path: "dashboard.html", active: isOwner },
+      { name: "Veterinarian", path: "vet-dashboard.html", active: isVet },
       { name: "Service Provider", path: "coming-soon.html" },
-      { name: "Marketplace", path: "coming-soon.html" },
+      { name: "Marketplace", path: "marketplace.html", active: isMarketplace },
       { name: "Admin", path: "coming-soon.html" },
     ];
+
+    const cartCount = (window.VetData ? window.VetData.getCart() : []).reduce((a, b) => a + b.quantity, 0);
 
     return `
       <header class="topnav">
@@ -39,22 +49,27 @@
             <button class="icon-btn md:flex hidden" aria-label="Search">
               <i data-lucide="search" class="i-5"></i>
             </button>
+            <a href="cart.html" class="icon-btn relative" aria-label="Cart">
+              <i data-lucide="shopping-cart" class="i-5"></i>
+              ${cartCount > 0 ? `<span class="cart-badge">${cartCount}</span>` : ""}
+            </a>
             <button class="icon-btn relative" aria-label="Notifications">
               <i data-lucide="bell" class="i-5"></i>
               <span class="notif-dot"></span>
             </button>
             <div class="dropdown" id="user-dropdown">
               <button class="avatar-btn" data-dropdown-toggle="user-dropdown" aria-label="Open user menu">
-                <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="Jane Doe">
+                <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="User">
               </button>
               <div class="dropdown-menu">
                 <div class="dropdown-label">
-                  <p class="text-sm font-medium">Jane Doe</p>
-                  <p class="text-xs text-muted-foreground">jane.doe@example.com</p>
+                  <p class="text-sm font-medium">${isVet ? "Dr. Sarah Jenkins" : "Jane Doe"}</p>
+                  <p class="text-xs text-muted-foreground">${isVet ? "sarah.jenkins@petwell.vet" : "jane.doe@example.com"}</p>
                 </div>
                 <div class="dropdown-separator"></div>
                 <a href="coming-soon.html" class="dropdown-item">Profile</a>
                 <a href="coming-soon.html" class="dropdown-item">Settings</a>
+                <a href="loyalty.html" class="dropdown-item">Loyalty Points</a>
                 <div class="dropdown-separator"></div>
                 <a href="login.html" class="dropdown-item">Log out</a>
               </div>
@@ -68,16 +83,50 @@
   // ---------- Sidebar ----------
   function renderSidebar() {
     if (!showSidebar) return "";
-    const items = [
-      { name: "Dashboard", href: "dashboard.html", icon: "layout-dashboard", id: "dashboard" },
-      { name: "My Pets", href: "pets.html", icon: "paw-print", id: "pets" },
-      { name: "Symptom Checker", href: "symptom-checker.html", icon: "stethoscope", id: "symptom-checker" },
-      { name: "Appointments", href: "appointments.html", icon: "calendar-days", id: "appointments" },
-      { name: "Lost Pet Alerts", href: "lost-pets.html", icon: "triangle-alert", id: "lost-pets" },
-    ];
+
+    let items = [], helpTitle = "Need help?", helpText = "Our veterinary support team is available 24/7.", helpHref = "symptom-checker.html", helpCta = "Start Triage";
+
+    if (isVet) {
+      items = [
+        { name: "Vet Dashboard", href: "vet-dashboard.html", icon: "layout-dashboard", id: "vet-dashboard" },
+        { name: "Patients", href: "vet-patients.html", icon: "users", id: "vet-patients" },
+        { name: "Consultation", href: "vet-consultation.html", icon: "clipboard-pen", id: "vet-consultation" },
+        { name: "Prescriptions", href: "vet-prescription.html", icon: "pill", id: "vet-prescription" },
+        { name: "Lab Results", href: "vet-lab-upload.html", icon: "flask-conical", id: "vet-lab-upload" },
+        { name: "Referrals", href: "vet-referral.html", icon: "share-2", id: "vet-referral" },
+        { name: "Surgery", href: "vet-surgery.html", icon: "syringe", id: "vet-surgery" },
+        { name: "Income & Schedule", href: "vet-income.html", icon: "trending-up", id: "vet-income" },
+      ];
+      helpTitle = "Need a consult?";
+      helpText = "Connect with a specialist for a second opinion.";
+      helpHref = "vet-referral.html";
+      helpCta = "Send Referral";
+    } else if (isMarketplace) {
+      items = [
+        { name: "Browse", href: "marketplace.html", icon: "store", id: "marketplace" },
+        { name: "Cart", href: "cart.html", icon: "shopping-cart", id: "cart" },
+        { name: "Subscriptions", href: "subscriptions.html", icon: "repeat", id: "subscriptions" },
+        { name: "Loyalty Points", href: "loyalty.html", icon: "award", id: "loyalty" },
+        { name: "Recalls", href: "recalls.html", icon: "alert-triangle", id: "recalls" },
+      ];
+      helpTitle = "Vet recommended";
+      helpText = "Filter products endorsed by your pet's veterinarian.";
+      helpHref = "marketplace.html?vetRec=1";
+      helpCta = "View Picks";
+    } else {
+      items = [
+        { name: "Dashboard", href: "dashboard.html", icon: "layout-dashboard", id: "dashboard" },
+        { name: "My Pets", href: "pets.html", icon: "paw-print", id: "pets" },
+        { name: "Symptom Checker", href: "symptom-checker.html", icon: "stethoscope", id: "symptom-checker" },
+        { name: "Appointments", href: "appointments.html", icon: "calendar-days", id: "appointments" },
+        { name: "Lost Pet Alerts", href: "lost-pets.html", icon: "triangle-alert", id: "lost-pets" },
+      ];
+    }
+
     const isActive = (id) => {
       if (id === "pets" && (pageInfo.id === "pets" || pageInfo.id === "pet-detail")) return true;
       if (id === "appointments" && (pageInfo.id === "appointments" || pageInfo.id === "appointments-new")) return true;
+      if (id === "marketplace" && (pageInfo.id === "marketplace" || pageInfo.id === "marketplace-product")) return true;
       return pageInfo.id === id;
     };
     return `
@@ -94,9 +143,9 @@
           <div class="sidebar-help-icon">
             <i data-lucide="paw-print" class="i-5"></i>
           </div>
-          <h4>Need help?</h4>
-          <p>Our veterinary support team is available 24/7.</p>
-          <a href="symptom-checker.html" class="btn btn-primary btn-sm w-full" style="display:flex">Start Triage</a>
+          <h4>${helpTitle}</h4>
+          <p>${helpText}</p>
+          <a href="${helpHref}" class="btn btn-primary btn-sm w-full" style="display:flex">${helpCta}</a>
         </div>
       </aside>
     `;
@@ -123,8 +172,8 @@
               <h4>Product</h4>
               <ul>
                 <li><a href="dashboard.html">Pet Owners</a></li>
-                <li><a href="coming-soon.html">Veterinarians</a></li>
-                <li><a href="coming-soon.html">Service Providers</a></li>
+                <li><a href="vet-dashboard.html">Veterinarians</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
               </ul>
             </div>
             <div>

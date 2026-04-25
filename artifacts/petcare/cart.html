@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart & Checkout — PetWell Marketplace</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Your Cart</h1>
+                <p>Review items, set up auto-ship, and proceed to checkout.</p>
+              </div>
+            </div>
+
+            <div class="grid" style="grid-template-columns: 1fr; gap: 1.5rem;" id="cart-layout">
+              <!-- left: items grouped by vendor -->
+              <div id="cart-items"></div>
+
+              <!-- right: summary -->
+              <div class="card card-soft" style="height:fit-content;position:sticky;top:5rem;">
+                <div class="card-header pb-2"><h3 class="text-lg font-semibold">Order Summary</h3></div>
+                <div class="card-content space-y-3" id="summary"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "cart" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/cart.js"></script>
+    <style>
+      @media (min-width: 1024px) { #cart-layout { grid-template-columns: 1fr 22rem; } }
+    </style>
+  </body>
+</html>

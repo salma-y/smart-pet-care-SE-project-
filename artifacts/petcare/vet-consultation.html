@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consultation — PetWell Vet</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Active Consultation</h1>
+                <p>Function #11 — Collaborative medical notes with audit trail.</p>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn btn-outline btn-sm" id="end-session"><i data-lucide="x" class="i-4"></i> End Session</button>
+                <button class="btn btn-primary btn-sm" id="save-note"><i data-lucide="save" class="i-4"></i> Save Note</button>
+              </div>
+            </div>
+
+            <div class="consult-layout">
+              <!-- Pet sidebar -->
+              <aside class="card card-soft" style="height:fit-content;">
+                <div class="card-content space-y-4" id="pet-sidebar"></div>
+              </aside>
+
+              <!-- Main editor -->
+              <div class="space-y-4">
+                <div class="card card-soft">
+                  <div class="card-header pb-2">
+                    <h3 class="text-lg font-semibold">Add Finding / Diagnosis</h3>
+                  </div>
+                  <div class="card-content space-y-3">
+                    <div>
+                      <label class="label">Type</label>
+                      <select class="select" id="finding-type">
+                        <option>SOAP — Subjective</option>
+                        <option>SOAP — Objective</option>
+                        <option>SOAP — Assessment</option>
+                        <option>SOAP — Plan</option>
+                        <option>Diagnosis</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="label">Notes</label>
+                      <textarea class="textarea" id="finding-text" placeholder="Enter clinical observations, vitals, assessment..."></textarea>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                      <button class="btn btn-outline btn-sm" id="attach-lab"><i data-lucide="paperclip" class="i-4"></i> Attach Lab Result</button>
+                      <button class="btn btn-outline btn-sm"><i data-lucide="image" class="i-4"></i> Attach Image</button>
+                      <button class="btn btn-primary btn-sm" id="add-finding" style="margin-left:auto;"><i data-lucide="plus" class="i-4"></i> Add to Record</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card card-soft">
+                  <div class="card-header flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">Audit Trail — This Session</h3>
+                    <span class="badge badge-primary" id="audit-count">0 entries</span>
+                  </div>
+                  <div class="card-content">
+                    <div id="audit-trail" class="audit-trail"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "vet-consultation" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/vet-consultation.js"></script>
+  </body>
+</html>

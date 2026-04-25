@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Lab Result — PetWell Vet</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 64rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Upload Lab Result</h1>
+                <p>Function #6 — Upload, summarize, and share lab work with the owner.</p>
+              </div>
+              <a href="vet-dashboard.html" class="btn btn-ghost btn-sm"><i data-lucide="arrow-left" class="i-4"></i> Back</a>
+            </div>
+
+            <div class="card card-soft">
+              <div class="card-content space-y-4">
+                <div class="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="label">Patient</label>
+                    <select class="select" id="patient-select"></select>
+                  </div>
+                  <div>
+                    <label class="label">Test name</label>
+                    <input class="input" id="test-name" placeholder="e.g. Complete Blood Count" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="label">Result file</label>
+                  <div class="dropzone" id="dropzone">
+                    <div class="dropzone-icon"><i data-lucide="cloud-upload" class="i-6"></i></div>
+                    <h4 class="font-semibold mb-1">Drop file or click to upload</h4>
+                    <p class="text-sm text-muted-foreground mb-3">PDF, JPG, or PNG up to 25 MB</p>
+                    <button class="btn btn-outline btn-sm" id="file-pick">Choose file</button>
+                    <p id="file-name" class="text-sm font-medium text-primary" style="margin-top:0.75rem;"></p>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="label">Result status</label>
+                  <div class="chip-group" id="status-chips">
+                    <span class="chip active" data-val="Pending Review">Pending Review</span>
+                    <span class="chip" data-val="Reviewed">Reviewed</span>
+                    <span class="chip" data-val="Shared with Owner">Shared with Owner</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="label">Simplified Insight <span class="text-xs text-muted-foreground" style="font-weight:500;">— shown to owner in plain English</span></label>
+                  <textarea class="textarea" id="simple-insight" placeholder="e.g. Mochi's bloodwork looks great. All values are within normal range — keep up the good work!"></textarea>
+                </div>
+
+                <div>
+                  <label class="label">Technical Notes <span class="text-xs text-muted-foreground" style="font-weight:500;">— vet-only, not shared with owner</span></label>
+                  <textarea class="textarea" id="tech-notes" placeholder="Clinical interpretation, ranges, follow-up instructions..."></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 border-t" style="padding-top:1rem;">
+                  <button class="btn btn-outline" id="save-draft">Save Draft</button>
+                  <button class="btn btn-primary" id="publish"><i data-lucide="send" class="i-4"></i> Publish to Owner</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "vet-lab-upload" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/vet-lab-upload.js"></script>
+  </body>
+</html>
