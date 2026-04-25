@@ -1,0 +1,101 @@
+Iteration 3
+Service Provider Module + Admin + Polish
+Project: Smart Pet Care & Veterinary Management System
+Tech Stack: HTML, CSS, JavaScript (frontend only)
+Reference Examples: https://www.chewy.com/ | https://www.petdesk.com/
+Continue from Iteration 1 & 2 — maintain the same design system, navigation, and component library.
+
+ITERATION 3 — Service Provider Module (SPM) + System Administration + Final Polish
+
+━━━ PART A: SERVICE PROVIDER MODULE (SPM) ━━━
+
+Pages to build:
+
+1. Sitter / Walker Dashboard
+   - Today's bookings timeline
+   - Earnings summary card (today / this week / this month) — Function #32 UI
+   - Pending booking requests list with Accept / Decline actions
+   - Certification badges display — Function #26 UI
+
+2. Service Area Setup Page (Function #22)
+   - Map placeholder with drawn geofence zones (visual only using SVG overlay or static map image)
+   - Add / remove zone controls
+   - Active service areas list with toggle
+
+3. Booking Management Page
+   - Booking request cards: pet info, owner name, date/time, service type
+   - Waitlist queue view for overlapping requests — Function #25 UI
+   - Accepted bookings calendar view
+
+4. Tiered Pricing Setup Page (Function #23)
+   - Base rate inputs per service type (walking / sitting / boarding)
+   - Duration multiplier selector
+   - Holiday rate toggle with date picker
+   - Multi-pet discount rules (e.g., +1 pet = -10%)
+   - Live price preview calculator
+
+5. Active Walk / Session Tracker Page (Function #24)
+   - Live GPS simulation: animated path on a static map placeholder
+   - Milestone buttons: Started | Potty Break | Arrived at Park | Ended
+   - Timer display
+   - "Send Update to Owner" button with message templates
+
+6. Incident Report Form (Function #27)
+   - High-priority structured form: incident type, description, severity selector
+   - Photo upload UI
+   - Send to Owner + Send to Admin toggle
+   - Submission confirmation with case number
+
+7. Check-In / Check-Out QR Page (Function #29)
+   - QR code display (static generated image placeholder)
+   - "Scan to Check In" instruction card
+   - Check-in / check-out timestamp display
+   - Confirmation status badge
+
+8. Behavioral Briefing Page (Function #30)
+   - Pre-service brief card: handling instructions, warnings, emergency contacts
+   - Read & Acknowledge button (required before booking activates)
+   - Allergy / medical notes (limited view — owner-controlled)
+
+9. Provider Earnings & Analytics Page (Function #32)
+   - Earnings chart (weekly / monthly toggle — bar chart)
+   - Pending vs. paid breakdown
+   - Mileage log table (simulated) with tax-deductible total
+   - Payout history list
+
+10. Provider Certification Page (Function #26)
+    - Certification upload form: cert type, issuing body, expiry date, document upload
+    - Verification state machine UI: Submitted → Under Review → Verified → Badged
+    - Active certifications display with expiry alerts
+
+11. Review System Page — Sitter View (Function #31)
+    - Reviews received (owner ratings of sitter)
+    - Reviews given (sitter ratings of pets/owners)
+    - Overall rating summary card
+
+━━━ PART B: SYSTEM ADMINISTRATION MODULE ━━━
+
+Pages to build:
+
+12. Admin Dashboard
+    - Platform health metrics: active users, bookings today, open disputes, recall alerts
+    - System-wide alerts panel — Function #39 UI
+    - Recent flagged accounts list — Function #38 UI
+
+13. User Management Page
+    - Searchable user table: name, role, status, join date, rating
+    - Account suspension toggle with reason selector — Function #38 UI
+    - KYC verification status column — Function #42 UI
+    - Click opens user detail panel
+
+14. KYC / Verification Panel (Function #42)
+    - Submitted document viewer (placeholder image frames)
+    - Approve / Reject / Request More Info actions
+    - Verification history log per user
+
+15. Dispute Mediation Page (Function #36)
+    - Open disputes list with priority badges
+    - Dispute detail view: chat log display, attached photos, timeline of events
+    - Resolution actions: Refund Owner | Pay Provider | Escalate | Close
+
+16.

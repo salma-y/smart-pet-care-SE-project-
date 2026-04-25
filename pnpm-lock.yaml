@@ -318,6 +318,9 @@ importers:
 
   artifacts/petcare:
     devDependencies:
+      '@rollup/rollup-win32-x64-msvc':
+        specifier: ^4.60.2
+        version: 4.60.2
       vite:
         specifier: 'catalog:'
         version: 7.3.2(@types/node@25.6.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)
@@ -5131,8 +5134,7 @@ snapshots:
   '@rollup/rollup-win32-x64-gnu@4.60.2':
     optional: true
 
-  '@rollup/rollup-win32-x64-msvc@4.60.2':
-    optional: true
+  '@rollup/rollup-win32-x64-msvc@4.60.2': {}
 
   '@scalar/helpers@0.5.2': {}
 
