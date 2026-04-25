@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Referrals — PetWell Vet</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Referrals</h1>
+                <p>Function #7 — Send and track patient referrals to specialist clinics.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="open-new"><i data-lucide="plus" class="i-4"></i> New Referral</button>
+            </div>
+
+            <div class="grid" style="grid-template-columns: 1fr; gap: 1.5rem;">
+              <!-- New referral form -->
+              <div class="card card-soft" id="new-form-card">
+                <div class="card-header pb-2">
+                  <h3 class="text-lg font-semibold">New Referral</h3>
+                </div>
+                <div class="card-content space-y-4">
+                  <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="label">Patient</label>
+                      <select class="select" id="ref-patient"></select>
+                    </div>
+                    <div>
+                      <label class="label">Specialist type</label>
+                      <select class="select" id="ref-type">
+                        <option>Orthopedic Surgeon</option>
+                        <option>Cardiologist</option>
+                        <option>Dermatologist</option>
+                        <option>Oncologist</option>
+                        <option>Neurologist</option>
+                        <option>Internal Medicine</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="label">Recipient clinic</label>
+                      <input class="input" id="ref-clinic" placeholder="e.g. Bay Area Veterinary Surgery" />
+                    </div>
+                    <div>
+                      <label class="label">Urgency</label>
+                      <select class="select" id="ref-urgency">
+                        <option>Routine</option>
+                        <option>Soon (within 2 weeks)</option>
+                        <option>Urgent (within 48 hours)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="label">Reason for referral</label>
+                    <textarea class="textarea" id="ref-reason" placeholder="Describe the clinical concern and what specialist input is needed..."></textarea>
+                  </div>
+                  <div>
+                    <label class="label">Records to attach</label>
+                    <div class="grid sm:grid-cols-3 gap-2" id="attach-grid">
+                      ${[
+                        "Vaccination History",
+                        "Recent Bloodwork",
+                        "Imaging / X-Rays",
+                        "Medication List",
+                        "Visit Notes (12 mo)",
+                        "Allergy Profile",
+                      ].map((x) => `
+                        <label class="checkbox-row" style="cursor:pointer;">
+                          <input type="checkbox" value="${x}" checked />
+                          <span class="text-sm">${x}</span>
+                        </label>
+                      `).join("")}
+                    </div>
+                  </div>
+                  <div class="flex justify-end gap-2 border-t" style="padding-top:1rem;">
+                    <button class="btn btn-ghost btn-sm" id="cancel-form">Cancel</button>
+                    <button class="btn btn-primary" id="send-ref"><i data-lucide="send" class="i-4"></i> Send Referral</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Referral status tracker -->
+              <div class="card card-soft">
+                <div class="card-header"><h3 class="text-lg font-semibold">Referral Status Tracker</h3></div>
+                <div class="card-content" id="ref-list"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "vet-referral" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/vet-referral.js"></script>
+  </body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vet Dashboard — PetWell</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div id="topnav-slot"></div>
+      <div class="main-area">
+        <div id="sidebar-slot"></div>
+        <div class="page-content">
+          <div class="p-6 md:p-8 mx-auto space-y-6" style="max-width: 80rem; width: 100%;">
+
+            <div class="page-header">
+              <div>
+                <h1>Good morning, Dr. Jenkins</h1>
+                <p>Here's your day at a glance — 7 appointments and 5 patient alerts.</p>
+              </div>
+              <div class="flex gap-2">
+                <a href="vet-prescription.html" class="btn btn-outline btn-sm"><i data-lucide="pill" class="i-4"></i> New Rx</a>
+                <a href="vet-consultation.html" class="btn btn-primary btn-sm"><i data-lucide="clipboard-pen" class="i-4"></i> Start Consult</a>
+              </div>
+            </div>
+
+            <!-- Stat strip -->
+            <div class="grid grid-4">
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#dbeafe;color:#2563eb;"><i data-lucide="calendar-days" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 8%</span>
+                </div>
+                <div class="stat-value">7</div>
+                <div class="stat-label">Today's appointments</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#fef9c3;color:#a16207;"><i data-lucide="alert-triangle" class="i-5"></i></div>
+                  <span class="stat-delta down"><i data-lucide="arrow-down" class="i-3"></i> 12%</span>
+                </div>
+                <div class="stat-value">5</div>
+                <div class="stat-label">Active patient alerts</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#dcfce7;color:#15803d;"><i data-lucide="check-circle-2" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 3</span>
+                </div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Completed this week</div>
+              </div>
+              <div class="stat-card">
+                <div class="flex items-center justify-between">
+                  <div class="stat-icon" style="background:#f3e8ff;color:#a855f7;"><i data-lucide="syringe" class="i-5"></i></div>
+                  <span class="stat-delta up"><i data-lucide="arrow-up" class="i-3"></i> 1</span>
+                </div>
+                <div class="stat-value">2/3</div>
+                <div class="stat-label">Surgery rooms in use</div>
+              </div>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="grid grid-4">
+              <a href="vet-prescription.html" class="quick-action">
+                <div class="quick-action-icon" style="background:#dbeafe;"><i data-lucide="pill" class="i-6 text-blue-500"></i></div>
+                <span>New Prescription</span>
+              </a>
+              <a href="vet-lab-upload.html" class="quick-action">
+                <div class="quick-action-icon" style="background:#dcfce7;"><i data-lucide="flask-conical" class="i-6 text-green-500"></i></div>
+                <span>Add Lab Result</span>
+              </a>
+              <a href="vet-referral.html" class="quick-action">
+                <div class="quick-action-icon" style="background:#f3e8ff;"><i data-lucide="share-2" class="i-6 text-purple-500"></i></div>
+                <span>Issue Referral</span>
+              </a>
+              <a href="vet-consultation.html" class="quick-action">
+                <div class="quick-action-icon" style="background:#ffedd5;"><i data-lucide="clipboard-pen" class="i-6 text-orange-500"></i></div>
+                <span>Write Note</span>
+              </a>
+            </div>
+
+            <div class="grid grid-2" style="gap:1.5rem;">
+              <!-- Today's schedule -->
+              <div class="card card-soft" style="grid-column: span 1;">
+                <div class="card-header flex items-center justify-between">
+                  <h3 class="text-xl font-bold">Today's Schedule</h3>
+                  <span class="badge badge-primary" id="today-date"></span>
+                </div>
+                <div class="card-content">
+                  <div class="schedule-list" id="schedule-list"></div>
+                </div>
+              </div>
+
+              <!-- Patient alerts -->
+              <div class="card card-soft">
+                <div class="card-header flex items-center justify-between">
+                  <h3 class="text-xl font-bold">Patient Alerts</h3>
+                  <a href="vet-patients.html" class="btn btn-ghost btn-sm text-muted-foreground">View all</a>
+                </div>
+                <div class="card-content" id="alerts-list"></div>
+              </div>
+            </div>
+
+            <!-- Surgery room availability -->
+            <div class="card card-soft">
+              <div class="card-header flex items-center justify-between">
+                <div>
+                  <h3 class="text-xl font-bold">Surgery Room Availability</h3>
+                  <p class="card-description">Function #5 — Live OR status across the clinic</p>
+                </div>
+                <a href="vet-surgery.html" class="btn btn-outline btn-sm">Open Scheduler</a>
+              </div>
+              <div class="card-content">
+                <div class="grid grid-3" id="rooms-strip"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div id="footer-slot"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>window.PetWellPage = { id: "vet-dashboard" };</script>
+    <script src="/js/data.js"></script>
+    <script src="/js/vet-data.js"></script>
+    <script src="/js/shell.js"></script>
+    <script src="/js/vet-dashboard.js"></script>
+  </body>
+</html>

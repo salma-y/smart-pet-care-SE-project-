@@ -1,4 +1,4 @@
-# PetWell — Iteration 1
+# PetWell — Iterations 1 & 2
 
 Smart Pet Care & Veterinary Management System. The warm, trustworthy hub for pet owners to manage their pets' lives.
 
@@ -26,11 +26,35 @@ artifacts/petcare/
 ├── appointments.html        Upcoming / past tabs
 ├── appointments-new.html    3-step booking flow + summary
 ├── lost-pets.html           Community alert grid + broadcast simulation
-├── coming-soon.html         Placeholder for vet/service/marketplace
+├── coming-soon.html         Placeholder for service/admin
+│
+│ ── Iteration 2: Veterinarian Module (8 pages) ──
+├── vet-dashboard.html       Vet home — stats, schedule, alerts, quick actions
+├── vet-patients.html        Patient roster with filters + search
+├── vet-consultation.html    Live consult workspace (history / SOAP / Rx tabs)
+├── vet-prescription.html    Prescription writer w/ drug-interaction warnings
+├── vet-lab-upload.html      Lab result upload + dropzone + history
+├── vet-referral.html        Specialist referral form + audit trail
+├── vet-surgery.html         Operating-room calendar (overlap detection)
+├── vet-income.html          Monthly stats, bar chart, payouts table
+│
+│ ── Iteration 2: Marketplace Module (6 pages) ──
+├── marketplace.html         Browse w/ category chips, filters, allergen banner
+├── marketplace-product.html PDP — gallery, diet badges, vet recommendation
+├── cart.html                Multi-vendor cart, auto-ship toggles, totals
+├── subscriptions.html       Auto-ship management
+├── loyalty.html             Loyalty hero + rewards catalog
+├── recalls.html             FDA recall feed
 ├── css/
 │   └── styles.css           All design tokens + utility classes + components
 ├── js/
 │   ├── data.js              window.PetData boundary (PHP swap point)
+│   ├── vet-data.js          window.VetData — vet + marketplace data layer
+│   ├── vet-dashboard.js, vet-patients.js, vet-consultation.js,
+│   ├── vet-prescription.js, vet-lab-upload.js, vet-referral.js,
+│   ├── vet-surgery.js, vet-income.js
+│   ├── marketplace.js, marketplace-product.js, cart.js,
+│   ├── subscriptions.js, loyalty.js, recalls.js
 │   ├── shell.js             TopNav / Sidebar / Footer / Toast / Modal
 │   ├── dashboard.js
 │   ├── pets.js
@@ -74,4 +98,13 @@ Layout slots (filled by `shell.js`):
 
 ## Workflow
 
-`artifacts/petcare: web` runs `pnpm --filter @workspace/petcare run dev` → `vite --config vite.config.ts --host 0.0.0.0` on `PORT` (artifact port 20603, mounted at `/`).
+`artifacts/petcare: web` runs `pnpm --filter @workspace/petcare run dev` → `vite --config vite.config.ts --host 0.0.0.0` on `PORT` (artifact port 5000, mounted at `/`).
+
+## Iteration 2 notes
+
+- Vet sidebar: 8 links (Dashboard / Patients / Consultation / Prescriptions / Lab Results / Referrals / Surgery / Income & Schedule). Help CTA: "Send Referral".
+- Marketplace sidebar: 5 links (Browse / Cart / Subscriptions / Loyalty / Recalls). Help CTA: "View Picks".
+- Shell auto-detects identity: vet pages show "Dr. Sarah Jenkins"; owner/marketplace pages show owner identity.
+- Cart badge in topnav reflects `VetData.getCartCount()`.
+- Drug-interaction warnings (`vet-prescription.js`): trigger for Carprofen + Prednisone, etc. Surgery scheduler (`vet-surgery.js`) uses overlap detection for double-booking prevention.
+- Allergen banner on marketplace surfaces Mochi's allergies (Chicken, Pollen).
